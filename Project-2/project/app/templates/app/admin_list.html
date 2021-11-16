@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+
+    <title>Document</title>
+</head>
+<body>
+    <nav class="navbar bg-light sticky-top">
+        <a href="{% url 'home' %}" >
+            <i class="fas fa-home fa-2x btn btn-primary " ></i>
+            
+        </a>
+        
+    </nav>
+    <div class="container">
+        <div class="row">
+            {% for user in users %}
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                {% if user.is_pending %}
+                
+                <div class="card">
+                    <img src="{{ user.product_image.url }}" alt="" class="card-img-top">
+                    <div class="card-body">
+                        <span class="text-muted">
+                            Postd By: {{ user.user.username }}
+                        </span>
+                        <h1 class="card-title">
+                            {{ user.product }}
+                        </h1>
+                        <div class="form-group" style="display: flex; justify-content: space-around;">
+                            <form action="/user/post/accept" method="POST">
+                                {% csrf_token %}
+                                <button class="btn btn-success" value="{{ user.id}}" name="product_id">
+                                    Accept
+                                </button>
+                              
+                            </form>
+                            <form action="/user/post/reject" method="POST" >
+                                {% csrf_token %}
+
+                                <button class="btn btn-danger" value="{{ user.id }}" name="product_id">
+                                    Reject
+                                </button>
+                            </form>
+    
+    
+
+                        </div>
+                      
+                    </div>
+                </div>
+                {% elif user.is_accepted %}
+                <h1>{{ user.user.username}} post accepted</h1>
+                {% else %}
+                <h1>{{ user.user.username}} post rejected</h1>
+                {% endif %}
+
+
+                        </div>
+                        
+            {% endfor %}
+          
+
+        </div>
+    </div>
+
+
+    
+</body>
+</html>

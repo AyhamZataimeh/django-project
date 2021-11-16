@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
+    <title>{{ product.product }}</title>
+</head>
+<body>
+    <nav class="navbar navbar bg-light">
+        <a href="{% url 'home' %}" class="nav-link">
+            Home
+        </a>
+    </nav>
+    <h1>
+        {{ product.product }}
+    </h1>
+
+    <img src="{{ product.product_image.url }}" alt="">
+    <h1>
+        contact: {{ product.user.phone_number }}
+    </h1>
+
+    {% if product.is_booked %}
+    <h1>Booked</h1>
+    {% else %}
+    <h1>not booked yet</h1>
+    <form  method="POST" action="/user/item">
+        {% csrf_token %}
+        <input type="hidden" value='{{ product.id}}' name="product_id">
+        <button class="btn btn-primary" type="submit">
+            Book
+        </button>
+
+    </form>
+    {% endif %}
+  
+      
+
+    
+</body>
+</html>

@@ -1,0 +1,271 @@
+body {
+    overflow-x:hidden;
+}
+
+
+.container > h1 {
+    text-align: center;
+    text-transform: capitalize;
+
+}
+
+nav i {
+    cursor: pointer;
+    padding: 5px;
+}
+
+.profile {
+    background-color: blueviolet;
+    position: relative;
+    width: 100%;
+    height:400px;
+
+
+}
+
+aside {
+    padding: 5px;
+    width: fit-content;
+    position: absolute;
+    position: fixed;
+    top: 8%;
+    right: 0%;
+    z-index: 1;
+    width: 25%;
+    /* animation: nav-side .5s linear both; */
+    visibility: hidden;
+}
+
+@keyframes nav-side {
+    from{ 
+        transform: translateX(100%);
+        
+
+
+
+    }
+    to {
+        transform: translateX(0%);
+        visibility: visible;
+
+    }
+    
+}
+
+@keyframes nav-side-hide {
+    from{ 
+        transform: translateX(0%);
+        visibility: visible;
+
+
+
+
+
+
+    }
+    to {
+        transform: translateX(100%);
+        
+        visibility: hidden;
+
+    }
+    
+}
+
+.profile>.profile-image {
+    position: absolute;
+    left: 50%;
+    bottom:0%;
+    transform: translate(-50%,50%);
+    z-index: 1;
+
+}
+.profile-image > img {
+    width: 300px;
+    height: 300px;
+}
+
+.profile>.profile-username{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+.profile-username h1 {
+    color: white;
+    text-transform: capitalize;
+}
+
+.profile-image img {
+    border-radius: 50%; 
+    border:1px solid blueviolet;
+  
+
+
+}
+
+.card {
+    margin-top:180px;
+    margin-bottom: 10px; 
+    cursor: pointer;
+    width: 200px;
+    height: 250px;
+    position: relative;
+    transition: .5s;
+
+}
+
+.card hr {
+    color: red;
+}
+
+
+
+.card:hover {
+    transform: scale(1.1);
+
+}
+
+.user-post {
+    color: white;
+    position: absolute;
+    top: 120%;
+    left: 50%;
+    z-index: 1;
+    background-color: blueviolet;
+    transform: translate(-50%,-90%);
+    padding: 30px;
+    width: fit-content;
+    border-radius: 15px;
+    visibility: hidden;
+}
+
+.user-post>button {
+    text-align: center;
+}
+
+
+
+
+.add {
+    border: 1px solid blue;
+    width: 200px;
+    height: 300px;
+    position: relative;
+    cursor: pointer;
+    transition: .5s;
+    margin-top: 100px;
+}
+
+.add > i {
+    color: blue;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+.add > span {
+    color: blue;
+    position: absolute;
+    font-size: 25px;
+    left: 50%;
+    top: 70%;
+    transform: translate(-50%,-70%);
+
+}
+
+.add:hover {
+    transform: translateY(-20px);
+
+
+}
+
+.user-post > form {
+    display: inline-block;
+}
+
+form>ul {
+    list-style: none;
+    color: red;
+}
+
+@media screen and (max-width:600px) {
+    .profile-image > img {
+        width: 200px;
+        height: 200px;
+        /* z-index: -1; */
+    }
+    .add {
+        display:  none;
+    }
+
+    .user-post {
+        position: absolute;
+        left: 40%;
+        margin-top: 50px;
+        visibility: visible;
+        width: 300px;
+    }
+
+    .user-post>button[type='button'] {
+        display: none;
+    }
+
+    .container {
+        margin-top: 200px;
+    }
+
+    hr {
+        display: none;
+    }
+    aside {
+        width: 100%;
+        z-index: 2;
+        overflow: hidden;
+        
+
+    }
+   
+
+
+    @keyframes nav-side {
+        from{ 
+            /* transform: translateY(-20%); */
+            height: 0px;
+            
+    
+    
+    
+        }
+        to {
+            /* transform: translateY(0%); */
+            height:400px;
+            visibility: visible;
+    
+        }
+        
+    }
+
+    @keyframes nav-side-hide {
+        from{ 
+            height: 400px;
+            visibility: visible;
+                
+    
+        }
+        to {
+            height: 0px;
+            visibility: hidden;
+    
+        }
+        
+    }
+}
+
+
+
+
+
+

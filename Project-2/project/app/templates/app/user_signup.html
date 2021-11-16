@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'app/styles/user_signup.css' %}">
+    <title>Sign up</title>
+</head>
+<body>
+    <div class="parent">
+        <div class="flip-card" id="flip">
+            <div class="flip front" >
+              
+            <h1>Here you can find what you want for free</h1>
+            <span>
+                Sign up
+            </span>
+
+                
+
+            </div>
+            <div class="flip back">
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form }}
+                   
+                    {{ image_form }}
+                    <button class="btn btn-primary">
+                        SignUp
+                    </button>
+                </form>
+
+
+            </div>
+        </div>
+
+        <script src="{% static 'app/script/user_signup.js' %}"></script>
+      
+   
+</body>
+</html>
