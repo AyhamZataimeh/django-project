@@ -9,9 +9,20 @@ body {
 
 }
 
+.star button {
+    outline: none;
+    border: none;
+    background-color: white;
+    
+}
+
 nav i {
     cursor: pointer;
     padding: 5px;
+}
+.fa-star {
+    color: red;
+    color:gold
 }
 
 .profile {

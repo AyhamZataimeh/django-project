@@ -1,0 +1,202 @@
+nav  {
+    height: 60px
+
+
+
+}
+
+nav a {
+    padding: 20px;
+        
+
+}
+
+nav h1 {
+    color: #0d6efd;
+}
+
+
+
+.dropdown {
+    position: relative;
+
+}
+
+.dropdown-menu {
+    position: absolute;
+    left: -40%;
+    top: 100%;
+    overflow: hidden;
+    display: block;
+    visibility: hidden;
+    /* animation: dropdown-show .5s linear both; */
+
+}
+
+.dropdown-menu li a {
+    /* animation-delay: .2s; */
+    animation-name: dropdown-item ;
+    animation-direction: alternate;
+    animation-duration: 1s;
+    animation-iteration-count: 2;
+    animation-delay: .5s;
+
+  
+    
+ 
+}
+
+@keyframes dropdown-item {
+    from {
+        transform: translateY(0px);
+    }
+    to {
+        transform: translateY(20px);
+    }
+    
+}
+
+.dropdown-toggle {
+    cursor: pointer;
+}
+
+@keyframes dropdown-show {
+    from {
+        height: 0px;
+        display: none;
+
+    }
+    to {
+        height: 180px;
+        display: block;
+
+    }
+    
+}
+
+@keyframes dropdown-hide {
+    from {
+        height: 180px;
+        visibility: visible;
+
+    }
+    to {
+        height: 0px;
+        visibility: hidden;
+
+    }
+    
+}
+
+
+
+
+
+footer {
+    background-color:rgba(26, 26, 26,0.8)   ;
+    display: flex;
+    padding: 20px;
+    color: white;
+    justify-content: space-between;
+
+    position: relative;
+
+}
+
+footer > .follow-us > h1 {
+    text-transform:capitalize;
+    padding-left: 20px;
+}
+
+
+.follow-us > a {
+    font-size: 20px;
+    margin: 20px;
+    
+}
+
+.follow-us > i {
+    /* font-size: 20px; */
+    margin-top: 50px;
+    
+}
+ 
+
+footer > #copyright {
+    position: absolute;
+    left: 40%;
+    bottom: 0%;
+    font-size: 20px;
+
+}
+
+a> #facebook  {
+    color: blue;
+}
+
+a > #instagram {
+
+    color: #dc2743;
+}
+
+a *> span {
+    color: white;
+}
+
+footer > .About-us {
+    width: 200px;
+}
+
+footer > .contact-us > h1 {
+    text-transform: capitalize;
+}
+
+
+footer > .contact-us > a {
+    color: white;
+    font-size: 20px;
+    margin-top: 40px;
+    
+}
+
+footer >div i {
+    transition: 1s;
+    margin-top: 20px;
+}
+
+footer >div i:hover {
+    transform: translateY(-10px);
+    /* color: white; */
+
+    
+
+}
+
+
+
+
+@media screen and (max-width:600px) {
+    footer {
+        /* background: red; */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        flex-wrap: nowrap;
+    }
+
+    footer > div  {
+        margin: 20px;
+        text-align: center;
+    }
+
+    footer> .About-us {
+        width: fit-content;
+    }
+
+    footer > #copyright {
+        margin-top:40px;
+        left: 67%;
+
+    }
+    
+}

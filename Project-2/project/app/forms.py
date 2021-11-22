@@ -82,9 +82,7 @@ class UserSignup(forms.ModelForm):
 
 class UserUpdate(forms.ModelForm):
 
-    username=forms.CharField(max_length=80,label='new name')
-    email=forms.EmailField(max_length=80,label='new email')
-    phone_number=forms.CharField(max_length=80,label='new phone number')
+   
     
     class Meta:
         model=User
@@ -94,26 +92,7 @@ class UserUpdate(forms.ModelForm):
             'email':'New email',
             'phone_number':'New phone number'
         }
-    def clean(self,*args,**kwargs):
-        username=self.cleaned_data['username']
-        email=self.cleaned_data['email']
-        phone_number=self.cleaned_data['phone_number']
-
-        check_username=User.objects.filter(username=username)
-        check_email=User.objects.filter(email=email)
-        check_phone_number=User.objects.filter(phone_number=phone_number)
-
-        if check_username.exists():
-            raise forms.ValidationError('user with that name already exsit try another one ')
-
-        if check_email.exists():
-            raise forms.ValidationError('user with that email already exsit try another one')    
-        
-        if check_phone_number.exists():
-            raise forms.ValidationError('user with that phone number already exsit try another one')    
-
-
-        return super(UserUpdate,self).clean(*args,**kwargs)    
+   
         
 
 class ProfileImage(forms.ModelForm):

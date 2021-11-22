@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+
+    <title>Document</title>
+</head>
+<body>
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">
+        {{ message}}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% for user in users %}
+    <div class="card" style="width: 200px;">
+        <img src="{{ user.profile_image.image.url }}" alt="">
+        <div class="card-body">
+            <h4 class="card-title">
+                name: {{ user.username }}
+            </h4>
+            <p>
+                email: {{ user.email }}
+            </p>
+            <span class="text-muted">
+                phone number: {{ user.phone_number }}
+            </span>
+
+            
+        </div>
+        <form action="/unblock-users/" method="POST">
+            {% csrf_token %}
+            <button  class="btn btn-success" name="user_id" value="{{ user }}">
+                Unblock
+            </button>
+    </form>
+    </div>
+   
+    {% endfor %}
+   
+</body>
+</html>

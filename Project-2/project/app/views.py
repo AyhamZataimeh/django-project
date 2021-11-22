@@ -3,7 +3,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import authenticate,get_user_model,login,logout
 from django.contrib import messages
 from .forms import UserLogin,UserSignup,ProfileImage,UserUpdate, UserPosts, Booked
-from .models import Products
+from .models import Products, BlockUsers
+from .models import ProfileImage as UserProfile 
 from django.db.models import Q
 from django.views.generic import TemplateView,DetailView, ListView
 from django.views import View
@@ -12,16 +13,19 @@ from django.contrib.auth.decorators import login_required
 
 User=get_user_model()
 
-class HomePageView(TemplateView):
+class HomePageView(ListView):
     template_name='app/home_page.html'
-    def get_context_data(self, **kwargs):
-        context =super().get_context_data(**kwargs)
-        get_user=self.request.user.username
-        # print('username is ',get_user)
-        find_user=User.objects.get(username=get_user)
-        user=Products.objects.filter(~Q(user=find_user))
-        context['users']=user   
-        return context
+    model=Products
+    context_object_name='products'
+
+    # def get_context_data(self, **kwargs):
+    #     context =super().get_context_data(**kwargs)
+    #     get_user=self.request.user.username
+    #     # print('username is ',get_user)
+    #     find_user=User.objects.get(username=get_user)
+    #     user=Products.objects.filter(~Q(user=find_user))
+    #     context['users']=user   
+    #     return context
 
 def booked_item_view(request,id):
     product=Products.objects.get(pk=id)
@@ -203,22 +207,64 @@ class AcceptedPosts(View):
 
 
 class RejectedPosts(View):
-    counter=0
     def get(self,request):
         pass
     
     def post(self,request):
-        self.counter=self.counter+1
         product_id=request.POST['product_id']
         user_prodcut=get_object_or_404(Products,pk=product_id)
+        user=get_object_or_404(User,pk=user_prodcut.user.id)
         user_prodcut.is_rejected=True
         user_prodcut.is_pending=False
-        user_prodcut.user.rejected_post=self.counter
-        if user_prodcut.user.rejected_post==3:
-            user_prodcut.user.is_blocked=True
+        user.rejected_post+=1
+        if user.rejected_post==3:
+            profile_image=get_object_or_404(UserProfile,user=user)
+            delete_products=Products.objects.filter(user=user).delete()
+            block_users=BlockUsers.objects.create(id=user.id,username=user.username,
+                                        email=user.email,phone_number=user.phone_number,
+                                        profile_image=profile_image)
+            user.is_blocked=True
+            block_users.save()
+            user.save()
+            messages.error(request,f'{user.username} have been blocked!')
+            return redirect('admin-list')
+
+
+        user.save()    
         user_prodcut.save()
         return redirect('admin-list')
         
+class UnblockUser(View):
+
+    def post(self,request):
+        get_user_name=request.POST['user_id']
+        get_user=get_object_or_404(User,username=get_user_name)
+        unblock_user=get_object_or_404(BlockUsers,username=get_user).delete()
+        get_user.is_blocked=False
+        get_user.rejected_post=0
+        get_user.save()
+        # unblock_user.save()
+        messages.success(request,f'{get_user.username} has been remove from the block list ')
+        return redirect('block-users')
+
+
+
+class UserLikes(View):
+
+    def post(self,request):
+        get_user_id=request.POST['user_id']
+        user=get_object_or_404(User,pk=get_user_id)
+
+        # user.total_liked
+
+
+class BlockListView(ListView):
+    model=BlockUsers
+    template_name='app/block_list.html'
+    context_object_name='users'
+
+   
+    
 
 class AdminListView(ListView):
     model=Products

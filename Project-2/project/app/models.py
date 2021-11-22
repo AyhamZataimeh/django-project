@@ -1,4 +1,3 @@
-from django.core.exceptions import MiddlewareNotUsed
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.utils.timezone import now
@@ -42,6 +41,7 @@ class UserAccount(AbstractBaseUser):
     gender=models.CharField(max_length=10,choices=Gender.choices,null=True)
     login_date=models.DateField(verbose_name='Login date',auto_now_add=True)
     last_login=models.DateField(verbose_name='Last Login',auto_now=True)
+    total_liked=models.IntegerField(default=0)
     rejected_post=models.IntegerField(default=0)
     is_blocked=models.BooleanField(default=False)
     is_admin=models.BooleanField(default=False)
@@ -106,4 +106,13 @@ class Products(models.Model):
             img.thumbnail(reszie)
             img.save(self.product_image.path)
 
+
+class BlockUsers(models.Model):
+    username=models.CharField(max_length=80)
+    email=models.CharField(max_length=80)
+    phone_number=models.CharField(max_length=80)
+    profile_image=models.OneToOneField(ProfileImage,on_delete=models.CASCADE,null=True)
+
+    def __str__(self) -> str:
+        return f'{self.username}'
 # Create your models here.

@@ -10,6 +10,14 @@
     <title>Document</title>
 </head>
 <body>
+    {% if messages %}
+    {% for message in messages%}
+    <div class="alert alert-{{message.tags }}">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    
     <nav class="navbar bg-light sticky-top">
         <a href="{% url 'home' %}" >
             <i class="fas fa-home fa-2x btn btn-primary " ></i>
