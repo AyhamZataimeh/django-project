@@ -1,8 +1,15 @@
+body {
+    overflow-x: hidden
+}
 nav  {
     height: 60px
 
 
 
+}
+
+nav > #aside-show {
+    display: none;
 }
 
 nav a {
@@ -24,7 +31,7 @@ nav h1 {
 
 .dropdown-menu {
     position: absolute;
-    left: -40%;
+    left: 0%;
     top: 100%;
     overflow: hidden;
     display: block;
@@ -46,7 +53,13 @@ nav h1 {
  
 }
 
-@keyframes dropdown-item {
+
+
+.card {
+    margin: 30px;
+}
+
+/* @keyframes dropdown-item {
     from {
         transform: translateY(0px);
     }
@@ -54,7 +67,7 @@ nav h1 {
         transform: translateY(20px);
     }
     
-}
+} */
 
 .dropdown-toggle {
     cursor: pointer;
@@ -67,7 +80,7 @@ nav h1 {
 
     }
     to {
-        height: 180px;
+        height: 350px;
         display: block;
 
     }
@@ -76,7 +89,7 @@ nav h1 {
 
 @keyframes dropdown-hide {
     from {
-        height: 180px;
+        height: 350px;
         visibility: visible;
 
     }
@@ -173,6 +186,64 @@ footer >div i:hover {
 }
 
 
+aside {
+    visibility: hidden;
+    width: fit-content;
+    position:fixed;
+    
+   
+
+}
+
+
+
+
+
+.card {
+    height: 500px;
+    width: 200px;
+}
+
+.card > img {
+    height: 300px;
+}
+
+
+
+
+
+@keyframes aside-show {
+    from {
+        visibility: hidden;
+        transform: translateX(-100%);
+
+    }
+
+    to {
+        visibility: visible;
+        display: block;
+        transform: translateX(0%);
+
+    }
+    
+}
+
+@keyframes aside-hide {
+    from {
+        visibility: visible;
+        transform: translateX(0%);
+        
+
+    }
+
+    to {
+        visibility: hidden;
+        transform: translateX(-100%);
+        
+    }
+    
+}
+
 
 
 @media screen and (max-width:600px) {
@@ -197,6 +268,52 @@ footer >div i:hover {
         margin-top:40px;
         left: 67%;
 
+    }
+
+    .row {
+        
+        display: inline-block;
+        margin-left:50px;
+    }
+
+    nav>a {
+        display: none;
+    }
+
+    nav > h1 {
+        display: none;
+    }
+
+    nav > ul {
+        display: none;
+
+    }
+    nav > #aside-show {
+        display: block;
+        padding: 5px;
+        cursor: pointer;
+    }
+
+    /* aside {
+        position: absolute;
+    } */
+    aside {
+        position: fixed;
+        
+    }
+
+    
+
+
+    
+}
+
+
+
+
+@media screen and (min-width:600px) {
+    aside {
+        display: none;
     }
     
 }

@@ -17,10 +17,13 @@ class UserLogin(forms.Form):
             user=authenticate(username=email,password=password)
 
             if not user:
-                raise forms.ValidationError(' user dosent exsit ')
-           
+                    raise forms.ValidationError(' user dosent exsit ')
+            
             if not user.is_active:
-                raise forms.ValidationError('User doesnt exit ')        
+                    raise forms.ValidationError('User doesnt exit ')
+
+            if not user.check_password(password):
+                    raise forms.ValidationError('Wrong password')            
         return super(UserLogin,self).clean(*args,**kwargs)
 
 class UserSignup(forms.ModelForm):
@@ -81,9 +84,10 @@ class UserSignup(forms.ModelForm):
 
 
 class UserUpdate(forms.ModelForm):
+    username=forms.CharField(max_length=80,label='new name')
+    email=forms.EmailField(max_length=80,label='new email')
+    phone_number=forms.CharField(max_length=80,label='new phone number')
 
-   
-    
     class Meta:
         model=User
         fields=['username','email','phone_number']
@@ -92,6 +96,26 @@ class UserUpdate(forms.ModelForm):
             'email':'New email',
             'phone_number':'New phone number'
         }
+
+    def clean(self,*args,**kwargs):
+        # username=self.cleaned_data['username']
+        # email=self.cleaned_data['email']
+        # phone_number=self.cleaned_data['phone_number']
+
+        # check_username=User.objects.filter(username=username)
+        # check_email=User.objects.filter(email=email)
+        # check_phone_number=User.objects.filter(phone_number=phone_number)
+
+        # if check_username.exists():
+        #     raise forms.ValidationError('name already exsit')
+
+        # if check_email.exists():
+        #     raise forms.ValidationError('email already exsit')
+
+        # if check_phone_number.exists():
+        #     raise forms.ValidationError('phone number already exsit')        
+
+        return super(UserUpdate,self).clean(*args,**kwargs)    
    
         
 
@@ -108,10 +132,11 @@ class UserPosts(forms.ModelForm):
 
     class Meta:
         model=Products
-        fields=['product','product_image']
+        fields=['product','product_image','category']
         labels={
             'product':'Product description',
-            'product_image':'Prodcut Image'
+            'product_image':'Prodcut Image',
+            'category':'product_category'
         }
 
 class Booked(forms.ModelForm):

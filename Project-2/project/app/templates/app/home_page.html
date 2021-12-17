@@ -12,88 +12,21 @@
 </head>
 <body>
     
-    <!-- {% if user.is_blocked %}
-    <h1>you have been blocked </h1>
-
-    {% else %}
-    <nav class="navbar bg-light sticky-top">
-
-    </nav>
-    {% if user.is_authenticated%}
-    <h1>welcome {{ user.username }}</h1>
-    <a href="{% url 'logout' %} " class="btn btn-primary">
-        Logout
-    </a>
-    {% if user.is_admin %}
-    <a href="{% url 'admin-list' %}" class="btn btn-primary">
-        Posts
-    </a>
-    <a href="{% url 'block-users' %}" class="btn btn-danger">
-        Block list
-
-    </a>
-
-    {% endif %}
-    <a href="{% url 'profile' %}" class="btn btn-primary">
-        Profile
-    </a>
-    {% else %}
-    <a href="{% url 'login' %}">
-        Login
-    </a>
-
-
-    {% endif %}
-    <div class="contianer">
-        <div class="row">
-            {% if user.is_authenticated %}
-
-            {% for user in users %}
-            <div class="col-xs-12 colsm-6 col-md-4">
-                {% if user.is_accepted %}
-
-                <div class="card" style="width: 200px; height: 300px;">
-                    <img src="{{ user.product_image.url }}" alt="" class="card-img-top">
-                    <div class="card-body">
-                        <h1>{{ user.product}}</h1>
-                        <span class="text-muted"> {{user.post_date}}</span>
-                      
-                        <a href="{% url 'item-detail' user.id %}" class="btn btn-primary">
-                            More Info
-                        </a>
-                      
-                    </div>
-                </div>
-                {% endif %}
-            </div>
-
-            {% endfor %}
-            {% endif  %}
-        
-            
-        </div>
-    </div>
-
-    <footer >
-
-    </footer>
-    
-    {% endif %} -->
     <nav class="navbar bg-light sticky-top">
         {% if user.is_authenticated %}
+        <i id='aside-show'  class="fas fa-bars fa-2x"></i>
         <a href="{% url 'home' %}" class="navbar-brand">
             Home
         </a>
         <h1 class="navbar-brand">
             Online Donation
         </h1>
+      
         <ul class="dropdown navbar-brand">
             <button style="border:none;" class="btn btn-light dropdown-toggle nav-link" id='dropdown-display'>
                 More
             </button>
-            <!-- <h4 class="dropdown-toggle" id='dropdown-display'>
-                more
-            </h4> -->
+          
             <div class="dropdown-menu" id="dropdown-menu">
                 <li>
                     <a class="nav-link dropdown-item" href="{% url 'profile' %}">
@@ -103,6 +36,7 @@
                     </a>
                     
                 </li>
+              
                 {% if user.is_admin %}
                 <li>
                     <a class="nav-link dropdown-item" href="{% url 'admin-list' %}">
@@ -126,6 +60,37 @@
                         Logout
                     </a>
                 </li>
+                <div class="dropdown-divider"></div>
+                <span class="nav-item dropdown-item" style="text-align: center;">sort by:</span>
+                <li>
+                    <a class="nav-link dropdown-item" href="{% url 'category' 'sports' %}">
+                        <i class="fas fa-running"></i>
+                    sports
+
+
+                      
+                    </a>
+                    
+                </li>
+                <li>
+                    <a href="{% url 'category' 'car parts' %}" class="nav-link dropdown-item">
+                        <i class="fas fa-car"></i>
+                        car parts
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'category' 'elctronics' %}" class="nav-link dropdown-item">
+                        <i class="fas fa-tablet-alt"></i>
+                        electroncs
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'category' 'clothes' %}" class="nav-link dropdown-item">
+                        <i class="fas fa-tshirt"></i>
+                        clothes
+                    </a>
+                </li>
+
 
             </div>
 
@@ -139,10 +104,140 @@
         </a>
         {% endif %}
 
+
     </nav>
+
+    <aside id='aside' >
+        <ul class="list-group">
+           
+            <li>
+                <a href="{% url 'home' %}" class="list-group-item list-group-item-action text-primary">
+            <i class="fas fa-home " ></i>
+            Home
+
+
+            
+                </a>
+
+               
+            </li>
+            <li>
+                <a class="list-group-item list-group-item-action text-primary" href="{% url 'profile' %}">
+                <i class="fas fa-user"></i>
+
+                    Profile
+                </a>
+                
+            </li>
+          
+            {% if user.is_admin %}
+            <li>
+                <a class="list-group-item list-group-item-action text-primary" href="{% url 'admin-list' %}">
+                <i class="fas fa-users"></i>
+
+                    Posts
+                </a>
+            </li>
+            <li>
+                <a class="list-group-item list-group-item-action text-primary" href="{% url 'block-users' %}">
+                    <i class="fas fa-user-lock"></i>
+                    Block list
+                </a>
+            </li>
+            {% endif %}
+            <li>
+                <a  class="list-group-item list-group-item-action text-primary" 
+                href="{% url 'logout' %}">
+                <i class="fas fa-sign-out-alt"></i>
+
+                    Logout
+                </a>
+            </li>
+            <!-- <div class="dropdown-divider"></div> -->
+            <span class="list-group-item" style="text-align: center;">sort by:</span>
+            <li>
+                <a class="list-group-item list-group-item-action text-primary" 
+                href="{% url 'category' 'sports' %}">
+                    <i class="fas fa-running"></i>
+                sports
+
+
+                  
+                </a>
+                
+            </li>
+            <li>
+                <a href="{% url 'category' 'car parts' %}" 
+                class="list-group-item list-group-item-action text-primary">
+                    <i class="fas fa-car"></i>
+                    car parts
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'category' 'elctronics' %}"  
+                class="list-group-item list-group-item-action text-primary">
+                    <i class="fas fa-tablet-alt"></i>
+                    electroncs
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'category' 'clothes' %}" 
+                class="list-group-item list-group-item-action text-primary">
+                    <i class="fas fa-tshirt"></i>
+                    clothes
+                </a
+            </li>
+
+
+           
+        </ul>
+    </aside>
     {% if user.is_authenticated %}
     <div class="conatainer">
         <div class="row">
+            {% for product in products %}
+            {% if product.is_accepted %}
+            
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <div class="card"  style="">
+                    <img src="{{ product.product_image.url }}" alt="" class="card-img-top">
+                    <div class="card-body">
+                        <h2 class="card-title">
+                            {{ product.product }}
+                        </h2>
+                        <span class="text-muted">
+                            category :{{ product.category}}
+
+                        </span>
+                        <br>
+                        <span class="text-muted">
+                            posted by: {{ product.user.username}}
+                        </span>
+                        
+                            <a 
+                            href="{% url 'item-detail' product.id %}" 
+                            class="btn btn-success card-link">
+                                More info
+                            </a>
+                          
+                        
+                    </div>
+                    <div class="card-footer text-muted">
+                        <span>
+                        posted in: {{ product.post_date }}
+
+
+                        </span>
+                        
+                    </div>
+                   
+                </div>
+            </div>
+
+
+            {% endif  %}
+        
+            {% endfor %}
             
         </div>
     </div>
@@ -240,7 +335,6 @@
             Ayham zataimeh
         </i>
 
-            <!-- <img src="project/media/pic.jpg" alt=""> -->
     </footer>
    
     

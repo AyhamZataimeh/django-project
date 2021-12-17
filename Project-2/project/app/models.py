@@ -22,6 +22,7 @@ class UserAccountManager(BaseUserManager):
         user.is_superuser=True
         user.save(using=self._db)
         return user   
+    
 
 male='male'
 female='female'
@@ -54,14 +55,18 @@ class UserAccount(AbstractBaseUser):
     USERNAME_FIELD='email'
     REQUIRED_FIELDS=['username']
 
+  
     def __str__(self) -> str:
         return self.username
 
     def has_perm(self,perm,obj=None,):
         return self.is_admin
 
+    def has_perms(self,perm_list,obj=None,):
+        return self.is_admin   
+
     def has_module_perms(self,app_label):
-        return True    
+        return self.is_admin
 
 class ProfileImage(models.Model):
     image=models.ImageField(upload_to='images',blank=True,null=True)
@@ -85,9 +90,17 @@ class ProfileImage(models.Model):
 
 
 class Products(models.Model):
+    class Categories(models.TextChoices):
+        sports='sports',_('sports')
+        elctronics='elctronics',_('elctronics')
+        car_parts='car parts',_('car parts')
+        clothes='clothes',_('clothes')
+        educational='education',_('education')
+
     product=models.CharField(max_length=80)
     post_date=models.DateField(default=now)
     product_image=models.ImageField(upload_to='products')
+    category=models.CharField(null=True,max_length=80,choices=Categories.choices,default='')
     is_booked=models.BooleanField(default=False)
     is_pending=models.BooleanField(default=True)
     is_rejected=models.BooleanField(default=False)

@@ -10,7 +10,14 @@
     <title>Sign up</title>
 </head>
 <body>
-    <div class="parent">
+
+    <nav class="navbar bg-light">
+        <h1 class="navbar-brand text-primary">
+            Online donation
+        </h1>
+
+    </nav>
+    <!-- <div class="parent">
         <div class="flip-card" id="flip">
             <div class="flip front" >
               
@@ -35,7 +42,31 @@
 
 
             </div>
+        </div> -->
+        <div class="container ">
+            <div class="row ">
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    
+                        <form method="POST" enctype="multipart/form-data" >
+                            {% csrf_token %}
+                
+                            {{ form }}
+    
+                            {{ image_form }}
+                            <button class="btn btn-primary" type="submit">
+                                Sign up
+                            </button>
+                        
+                        </form>
+
+                    
+                  
+
+                </div>
+            </div>
         </div>
+
+       
 
         <script src="{% static 'app/script/user_signup.js' %}"></script>
       

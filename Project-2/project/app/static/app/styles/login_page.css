@@ -1,23 +1,108 @@
 body {
     background-image: linear-gradient(to left,blue  ,rgb(192, 0, 192) );
+    background-image: url('https://gm-cpas.com/images/articles/charity-donations.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    background-clip: border-box;
+    
 }
+
+nav > h1 {
+    text-transform: capitalize;
+    color: white;
+    margin-left: 600px;
+    text-align: center;
+    animation:online-donation 2s linear both;
+    
+}
+
+@keyframes online-donation {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.5) ;
+    
+
+    }
+
+    100% {
+        transform: scale(1);
+
+    }
+    
+}
+
+
 .parent {
-    width: fit-content;
+    width: 50%;
     margin: 50px auto;
-    background-color: white;
+    background-color: rgba(255,255,255,0.8);
     box-shadow: 0 0 20px white;
     border-radius: 10px;
     padding: 20px;
     height:400px;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-around;
     position: relative;
     
 
 }
-.parent h1 {
+.child-1 {
+    width: calc(100%/2);
+
+}
+
+
+
+.child-1 > p {
+    font-size: 20px;
+    color: red;
     text-align: center;
+    animation: paragraph  .5s linear both;
+    /* opacity: 0; */
+
+    
+}
+
+.child-1 > p[id='par-2'] {
+    animation-delay: 1s;
+}
+
+.child-1 > p[id='par-3'] {
+    animation-delay: 1.5s;
+}
+
+@keyframes paragraph {
+    from {
+        transform: scale(0);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+    
+}
+
+form > h1 {
+    text-align: center;
+}
+
+form {
+    margin-top: 20px;
+    margin: 10px;
+
 }
 form input {
     margin: 10px;
+    border-radius: 45px;
+    
 }
 .parent button {
     margin: 20px 70px auto;
@@ -69,10 +154,57 @@ form {
     width: 200px;
 
 }
+
+input[type='email'],
+input[type='password'] {    
+    border-radius: 15px;
+}
+
 span {
     position: absolute;
     bottom: 0%;
 
    
 
+}
+
+span > a {
+    text-decoration: none;
+
+}
+
+.child-1 >p::selection {
+    background-color: transparent;
+}
+
+form> label::selection ,
+form > h1::selection {
+    background-color: transparent;
+}
+
+.parent > span::selection {
+    background-color: transparent;
+
+}
+
+@media screen and (max-width:1000px) {
+    .parent {
+        display: flex;
+        flex-direction: column-reverse;
+        width: fit-content;
+        /* justify-content: space-around; */
+
+    }
+    body {
+        background-image: url('https://gm-cpas.com/images/articles/charity-donations.jpg');
+        background-size: cover
+    }
+    .child-1 {
+        display: none;
+    }
+
+    nav h1 {
+        margin-left: 200px;
+    }
+    
 }

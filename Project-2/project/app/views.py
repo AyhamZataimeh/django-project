@@ -1,4 +1,5 @@
 from django import forms
+from django.http import request
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import authenticate,get_user_model,login,logout
 from django.contrib import messages
@@ -8,7 +9,7 @@ from .models import ProfileImage as UserProfile
 from django.db.models import Q
 from django.views.generic import TemplateView,DetailView, ListView
 from django.views import View
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 
 
 User=get_user_model()
@@ -18,14 +19,28 @@ class HomePageView(ListView):
     model=Products
     context_object_name='products'
 
-    # def get_context_data(self, **kwargs):
-    #     context =super().get_context_data(**kwargs)
-    #     get_user=self.request.user.username
-    #     # print('username is ',get_user)
-    #     find_user=User.objects.get(username=get_user)
-    #     user=Products.objects.filter(~Q(user=find_user))
-    #     context['users']=user   
-    #     return context
+    try:
+        def get_context_data(self, **kwargs):
+                request=self.request
+                if request.user.is_authenticated:
+                    context =super().get_context_data(**kwargs)
+                    get_username=self.request.user.username
+                    user=User.objects.get(username=get_username)
+                    user_products=Products.objects.filter(~Q(user=user)).order_by('-post_date')
+                    context['products']=user_products   
+                    return context
+    except:
+        pass            
+        
+
+def sort_item(request,category):
+    get_items=Products.objects.filter(category=category)
+    context={
+        'products':get_items
+    }
+    return render(request,'app/home_page.html',context)
+
+
 
 def booked_item_view(request,id):
     product=Products.objects.get(pk=id)
@@ -77,15 +92,13 @@ def home_page_view(request):
 
 def login_view(request):
     next=request.GET.get('next')
+    user=request.user
     if request.method == 'POST':
         form=UserLogin(request.POST)
         if form.is_valid():
             email=form.cleaned_data['email']
             password=form.cleaned_data['password']
-            user=authenticate(username=email,password=password)
-            if not user.check_password(password):
-                print('wrong')
-                raise forms.ValidationError(' Wrong password')
+            user=authenticate(username=email,password=password)  
             login(request,user)
             if next:
                 return redirect(next)
@@ -156,9 +169,7 @@ def profile(request):
 
         
         if update_user.is_valid() and update_image.is_valid():
-            update_user.save()
-           
-
+            update_user.save()             
             update_image.save()
             messages.success(request,' Profile has been updated ')
             return redirect('profile')
@@ -174,7 +185,8 @@ def profile(request):
             'update_user':update_user,
             'update_image':update_image,
             'post':user_post,
-            'posts':posts
+            'posts':posts,
+            'user':find_user
         }
 
         return render(request,'app/user_profile.html',context)
@@ -187,7 +199,8 @@ def profile(request):
             'update_user':update_user,
             'update_image':update_image,
             'post':user_post,
-            'posts':posts
+            'posts':posts,
+            # 'user_1':find_user
         }
         return render(request,'app/user_profile.html',context)
 
@@ -203,6 +216,20 @@ class AcceptedPosts(View):
         user_product.is_accepted=True
         user_product.is_pending=False        
         user_product.save()
+        return redirect('admin-list')
+
+class AcceptAllPosts(View):
+    def get(self,request):
+        pass
+    def post(self,request):
+        pending_posts=Products.objects.filter(is_pending=True)
+        print(pending_posts)
+        for pending_post in pending_posts:
+            pending_post.is_accepted=True
+            pending_post.is_pending=False
+            pending_post.save()
+
+
         return redirect('admin-list')
 
 
@@ -264,12 +291,13 @@ class BlockListView(ListView):
     context_object_name='users'
 
    
-    
+
 
 class AdminListView(ListView):
     model=Products
     template_name='app/admin_list.html'
     context_object_name='users'
+
     
     
 
