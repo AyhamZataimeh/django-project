@@ -52,6 +52,12 @@
                     </a>
                 </li>
                 {% endif %}
+                <li>
+                    <a href="{% url 'users' %}" class="nav-link dropdown-item ">
+                        <i class="fas fa-users"></i>
+                        Users
+                    </a>
+                </li>
                
                 <li>
                     <a class="nav-link dropdown-item" href="{% url 'logout' %}">
@@ -185,7 +191,7 @@
                 class="list-group-item list-group-item-action text-primary">
                     <i class="fas fa-tshirt"></i>
                     clothes
-                </a
+            </a>
             </li>
 
 
@@ -199,7 +205,7 @@
             {% if product.is_accepted %}
             
             <div class="col-xs-12 col-sm-6 col-md-4">
-                <div class="card"  style="">
+                <div class="card">
                     <img src="{{ product.product_image.url }}" alt="" class="card-img-top">
                     <div class="card-body">
                         <h2 class="card-title">

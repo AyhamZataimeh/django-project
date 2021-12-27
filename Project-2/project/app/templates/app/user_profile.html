@@ -22,12 +22,12 @@
       
        
     </nav>
-    <form action="/user/star/" class="star" >
+    <!-- <form action="/user/star/" class="star" >
         <button value="user.id" name="user_id">
             <i class="fas fa-star fa-2x" name='user_id' ></i>
 
 
-        </button>
+        </button> -->
 
 
     </form>
@@ -42,7 +42,6 @@
         <p>
             Phone Number: {{ user.phone_number}}
         </p>
-            <hr>
         <form action="" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             {{ update_user.as_p }}
@@ -55,38 +54,54 @@
    
     <div class="profile">
         <div class="profile-image">
+            <!-- <img src="" alt=""> -->
         <img src="{{user.profileimage.image.url}}" alt="">
 
 
         </div>
-        <div class="profile-username">
+        <div class="profile-info">
         <h1>{{ user.username }}</h1>
-
-
-        </div>
-
-    </div>
-    <div class="user-post" id="post">
+        <i class="fas fa-envelope text-muted">
+            {{ user.email }}
+        </i>
+        <i class="fas fa-map-marker-alt fa-1x  text-muted">
+            Amman
+        </i>
+        <i class="fas fa-phone text-muted">
+            {{ user.phone_number }}
+        </i>
         
-    <form action="" method="POST" enctype="multipart/form-data" >
-        {% csrf_token %}
 
-        <div class="form-group">
-            {{ post.as_p }}
 
         </div>
-        <button class="btn btn-light">
-            Post
-        </button>
-    </form>
-
-    <button class="btn btn-light" type="button" id='cancel'>
-        Cancel
-    </button>
-
-     
 
     </div>
+
+   
+        <div class="user-post" id="post">
+        
+            <form action="" method="POST" enctype="multipart/form-data" >
+                {% csrf_token %}
+        
+                <div class="form-group">
+                    {{ post.as_p }}
+        
+                </div>
+                <button class="btn btn-light">
+                    Post
+                </button>
+            </form>
+        
+            <button class="btn btn-light" type="button" id='cancel'>
+                Cancel
+            </button>
+        
+             
+        
+            </div>
+       
+     
+   
    
 
 
@@ -106,6 +121,8 @@
     <div class="container">
 
         <div class="row">
+            {% if not is_visitor %}
+        
             <div class="col-xs-12 col-sm-6 col-md-4">
                 <div class="add" id="add">
                     <i class="fas fa-plus fa-3x"></i>
@@ -116,9 +133,12 @@
 
                 </div>
             </div>
+            {% endif %}
         </div>
-        <hr>
+        <!-- <hr> -->
+        {% if not is_visitor %}
         <h1>your posts</h1>
+        {% endif %}
 
 
     
@@ -147,8 +167,7 @@
                     <span class="text-muted">
                        posted in: {{ post.post_date|date:"d ,M"}}
                     </span>
-                    {% if post.is_booked %}
-                    <h2>Booked</h2>
+                    {% if not is_visitor %}
                     <form method="POST" action="/user/unbook/item">
                         {% csrf_token %}
                         <input type="hidden" name="product_id" value="{{ post.id }}">
@@ -159,6 +178,28 @@
                         </button>
 
                     </form>
+                    {% endif %}
+                    {% if post.is_booked %}
+                    <h2>Booked</h2>
+                    {% elif is_visitor%}
+                    <a href="{% url 'item-detail' post.id %}" class="btn btn-success" style="float: left;">
+                        More info
+                    </a>
+                    <form action="/users/user" method="POST">
+                        {% csrf_token %}
+                        <button class="btn btn-success" name='product_id' value="{{ post.id }}">
+                            Book
+
+                        </button>
+                    </form>
+
+                    <!-- <form action="/user/item" method="POST">
+                        {% csrf_token %}
+                        <button class="btn btn-success" name='product_id' value="{{ post.id}}">
+                            Book
+                        </button>
+                    </form> -->
+                   
                   
 
                     {% endif %}

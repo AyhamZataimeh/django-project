@@ -53,11 +53,20 @@ def booked_item_view(request,id):
 class BookItemView(View):
 
     def post(self,request):
+
         product_id=request.POST['product_id']
         product=get_object_or_404(Products,pk=product_id)
+        product_owner_id=product.user.id
+        owner=get_object_or_404(User,pk=product_owner_id)
         product.is_booked=True
         product.save()
-        return redirect('/user/item/'+product_id)
+        path=self.request.path
+        if path=='/users/user':
+            return redirect(f'{path}/{owner.id}')         
+        elif path=='/user/item':
+            return redirect(f'{path}/{product_id}')
+
+        # print()
 
 
 class UnBookedItemView(View):
@@ -219,11 +228,9 @@ class AcceptedPosts(View):
         return redirect('admin-list')
 
 class AcceptAllPosts(View):
-    def get(self,request):
-        pass
+
     def post(self,request):
         pending_posts=Products.objects.filter(is_pending=True)
-        print(pending_posts)
         for pending_post in pending_posts:
             pending_post.is_accepted=True
             pending_post.is_pending=False
@@ -231,6 +238,54 @@ class AcceptAllPosts(View):
 
 
         return redirect('admin-list')
+
+class Users(ListView):
+    model=User
+    template_name='app/users.html'
+    context_object_name='users'
+
+    def get_context_data(self, **kwargs):
+        is_admin=self.request.user.is_superuser
+        context=super().get_context_data(**kwargs)
+        users=User.objects.filter(is_admin=False)
+        context['users']=users
+        context['is_admin']=is_admin
+        return context
+
+class BlockUserView(View):
+    def post(self,request):
+        user_id=request.POST['user_id']
+        user=get_object_or_404(User,pk=user_id)
+        user.is_blocked=True
+        block_user=BlockUsers()
+        block_user.username=user.username
+        block_user.email=user.email
+        block_user.phone_number=user.phone_number
+        profile_image=get_object_or_404(UserProfile,user=user)
+        block_user.profile_image=profile_image
+        user.save()
+        block_user.save()
+        return redirect('users')
+
+
+class UserDetail(DetailView):
+    model=User
+    template_name='app/user_profile.html'
+    context_object_name='user'
+    def get_context_data(self, **kwargs):
+        context= super().get_context_data(**kwargs)
+        loaded_user=self.object
+        get_loaded_user=get_object_or_404(User,pk=loaded_user.id)
+        user_products=Products.objects.filter(user=get_loaded_user)
+        request=self.request
+        user=request.user
+        visitor=loaded_user.id != user.id
+        context['is_visitor']=visitor
+        context['posts']=user_products
+        return context
+   
+      
+
 
 
 class RejectedPosts(View):
