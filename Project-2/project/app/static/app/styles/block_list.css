@@ -36,12 +36,12 @@ nav h1 {
     overflow: hidden;
     display: block;
     visibility: hidden;
-    /* animation: dropdown-show .5s linear both; */
+    
 
 }
 
 .dropdown-menu li a {
-    /* animation-delay: .2s; */
+    
     animation-name: dropdown-item ;
     animation-direction: alternate;
     animation-duration: 1s;
@@ -130,6 +130,12 @@ aside {
 }
 
 
+.blocked {
+    text-align: center;
+    margin-top: 5%;
+    text-transform: capitalize;
+}
+
 
 
 
@@ -169,9 +175,9 @@ aside {
 @media screen and (max-width:600px) {
    
     .row {
-        
-        display: inline-block;
-        margin-left:50px;
+        margin-top: 5%;
+        margin-left:0%;
+        z-index: 0;
     }
 
     nav>a {
@@ -190,6 +196,7 @@ aside {
         display: block;
         padding: 5px;
         cursor: pointer;
+        z-index: 2;
     }
 
     aside {
@@ -197,7 +204,8 @@ aside {
         
     }
     .card {
-        margin-left:100px ;
+        z-index: -1;
+      
     }
 
     
@@ -215,3 +223,5 @@ aside {
     }
     
 }
+
+

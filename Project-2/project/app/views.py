@@ -1,15 +1,13 @@
-from django import forms
-from django.http import request
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import authenticate,get_user_model,login,logout
 from django.contrib import messages
-from .forms import UserLogin,UserSignup,ProfileImage,UserUpdate, UserPosts, Booked
+from .forms import UserLogin,UserSignup,ProfileImage,UserUpdate, UserPosts
 from .models import Products, BlockUsers
 from .models import ProfileImage as UserProfile 
 from django.db.models import Q
-from django.views.generic import TemplateView,DetailView, ListView
+from django.views.generic import DetailView, ListView
 from django.views import View
-from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
+from django.contrib.auth.decorators import login_required
 
 
 User=get_user_model()
@@ -125,16 +123,24 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return render(request,'app/logout_page.html')
+    return redirect('login')
 
 
 def signin_view(request):
     next=request.GET.get('next')
     if request.method == 'POST':
+
         form=UserSignup(request.POST)
         img_form=ProfileImage(request.POST,request.FILES)
 
+        if img_form.is_valid():
+            print('image works')
+
+        if form.is_valid():
+            print('form works')    
+
         if form.is_valid() and img_form.is_valid():
+            print('Entered')
             email=form.cleaned_data['email']
             password=form.cleaned_data['password']
             username=form.cleaned_data['username']
@@ -165,24 +171,54 @@ def signin_view(request):
         }        
         return render(request,'app/user_signup.html',context)
 
+def profile_edit(request,id):
+    user=get_object_or_404(User,pk=id)
+    user_update=UserUpdate(instance=request.user)
+    profileimage_update=ProfileImage(request.FILES,instance=request.user.profileimage)
+
+    if request.method=='POST':
+        user_update=UserUpdate(request.POST,instance=request.user)
+        profileimage_update=ProfileImage(request.POST,request.FILES,instance=request.user.profileimage)
+      
+
+        if user_update.is_valid() and profileimage_update.is_valid():
+            user_update.save()
+            profileimage_update.save()
+            messages.success(request,'you have successfully update your profile')
+            path=request.path
+            return redirect(path)
+  
+
+        context={
+            'user_update':user_update,
+            'profileimage_update':profileimage_update,
+            'user':user
+        }
+ 
+
+        return render(request,'app/edit_profile.html',context)
+    
+    context={
+        'user_update':user_update,
+        'profileimage_update':profileimage_update,
+        'user':user
+    }
+    return render(request,'app/edit_profile.html',context)
+ 
+    
+    
+
+
 @login_required
 def profile(request):
     find_user=get_object_or_404(User,username=request.user.username)
   
     if request.method == 'POST':
         posts=Products.objects.filter(user=find_user)
-        update_user=UserUpdate(request.POST,instance=request.user)
-        update_image=ProfileImage(request.POST,request.FILES,instance=request.user.profileimage)
         user_post=UserPosts(request.POST,request.FILES)
 
 
-        
-        if update_user.is_valid() and update_image.is_valid():
-            update_user.save()             
-            update_image.save()
-            messages.success(request,' Profile has been updated ')
-            return redirect('profile')
-
+     
         if user_post.is_valid():
             post=user_post.save(commit=False)
             post.user=find_user
@@ -191,8 +227,6 @@ def profile(request):
             return redirect('profile')
 
         context={
-            'update_user':update_user,
-            'update_image':update_image,
             'post':user_post,
             'posts':posts,
             'user':find_user
@@ -238,6 +272,17 @@ class AcceptAllPosts(View):
 
 
         return redirect('admin-list')
+
+class RejectAllPost(View):
+    
+    def post(self,request):
+        posts=Products.objects.filter(is_pending=True)
+        for post in posts:
+            post.is_pending=False
+            post.is_rejected=True
+            post.save()
+        return redirect('admin-list')   
+
 
 class Users(ListView):
     model=User

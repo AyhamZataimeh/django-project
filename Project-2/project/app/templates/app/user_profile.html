@@ -7,54 +7,157 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'app/styles/home_page.css' %}">
     <link rel="stylesheet" href="{% static 'app/styles/user_profile.css' %}">
     <title>Profile</title>
 </head>
 <body>
-    <nav class="navbar navbar bg-light sticky-top">
+
+     
+    <nav class="navbar bg-light sticky-top">
+        {% if user.is_authenticated %}
+        <i id='aside-show'  class="fas fa-bars fa-2x"></i>
         <a href="{% url 'home' %}" class="navbar-brand">
             Home
         </a>
-        <i id='side-show'
-        class="fas fa-bars fa-2x"></i>
-
-
+        <h1 class="navbar-brand">
+            Online Donation
+        </h1>
       
-       
-    </nav>
-    <!-- <form action="/user/star/" class="star" >
-        <button value="user.id" name="user_id">
-            <i class="fas fa-star fa-2x" name='user_id' ></i>
-
-
-        </button> -->
-
-
-    </form>
-    <aside class="bg-light" id='a-side' >
-        <p>
-            Name: {{user_1.username}}
-        </p>
-        <p>
-            Email: {{ user.email }}
-        </p>
-
-        <p>
-            Phone Number: {{ user.phone_number}}
-        </p>
-        <form action="" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ update_user.as_p }}
-            {{ update_image }}
-            <button class="btn btn-primary">
-                Submit
+        <ul class="dropdown navbar-brand">
+            <button style="border:none;" class="btn btn-light dropdown-toggle nav-link" id='dropdown-display'>
+                More
             </button>
-            </form>
+          
+            <div class="dropdown-menu" id="dropdown-menu">
+                <li>
+                    <a class="nav-link dropdown-item" href="{% url 'profile' %}">
+                    <i class="fas fa-user"></i>
+
+                        Profile
+                    </a>
+                    
+                </li>
+              
+                {% if user.is_admin %}
+                <li>
+                    <a class="nav-link dropdown-item" href="{% url 'admin-list' %}">
+                    <i class="fas fa-users"></i>
+
+                        Posts
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link dropdown-item" href="{% url 'block-users' %}">
+                        <i class="fas fa-user-lock"></i>
+                        Block list
+                    </a>
+                </li>
+                {% endif %}
+                <li>
+                    <a href="{% url 'users' %}" class="nav-link dropdown-item ">
+                        <i class="fas fa-users"></i>
+                        Users
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'user-edit' user.id %}" class="nav-link dropdown-item" >
+                        <i class="fas fa-user-edit"></i>
+                        Edit profile
+                    </a>
+                </li>
+               
+                <li>
+                    <a class="nav-link dropdown-item" href="{% url 'logout' %}">
+                    <i class="fas fa-sign-out-alt"></i>
+
+                        Logout
+                    </a>
+                </li>
+              
+            
+
+            </div>
+
+          
+        </ul>
+        {% else %}
+        <a href="{% url 'login' %}" class="nav-link">
+            <i class="fas fa-sign-in-alt"></i>
+            login
+
+        </a>
+        {% endif %}
+
+
+    </nav>
+    
+
+    <aside id='aside' >
+        <ul class="list-group">
+           
+            <li>
+                <a href="{% url 'home' %}" class="list-group-item list-group-item-action text-primary">
+            <i class="fas fa-home " ></i>
+            Home
+
+
+            
+                </a>
+
+               
+            </li>
+            <li>
+                <a class="list-group-item list-group-item-action text-primary" href="{% url 'profile' %}">
+                <i class="fas fa-user"></i>
+
+                    Profile
+                </a>
+                
+            </li>
+          
+            {% if user.is_admin %}
+            <li>
+                <a class="list-group-item list-group-item-action text-primary" href="{% url 'admin-list' %}">
+                <i class="fas fa-users"></i>
+
+                    Posts
+                </a>
+            </li>
+            <li>
+                <a class="list-group-item list-group-item-action text-primary" href="{% url 'block-users' %}">
+                    <i class="fas fa-user-lock"></i>
+                    Block list
+                </a>
+            </li>
+            {% endif %}
+            <li>
+                <a href="{% url 'user-edit' user.id %}" class="list-group-item list-group-item-action text-primary">
+                    <i class="fas fa-user-edit"></i>
+
+                    Edit profile
+
+                </a>
+            </li>
+            <li>
+                <a  class="list-group-item list-group-item-action text-primary" 
+                href="{% url 'logout' %}">
+                <i class="fas fa-sign-out-alt"></i>
+
+                    Logout
+                </a>
+            </li>
+            
+
+           
+        </ul>
     </aside>
+
+
+    
    
     <div class="profile">
         <div class="profile-image">
-            <!-- <img src="" alt=""> -->
         <img src="{{user.profileimage.image.url}}" alt="">
 
 
@@ -65,7 +168,7 @@
             {{ user.email }}
         </i>
         <i class="fas fa-map-marker-alt fa-1x  text-muted">
-            Amman
+            {{ user.city }}
         </i>
         <i class="fas fa-phone text-muted">
             {{ user.phone_number }}
@@ -79,6 +182,7 @@
 
    
         <div class="user-post" id="post">
+            <h1 class="post">Post a product</h1>
         
             <form action="" method="POST" enctype="multipart/form-data" >
                 {% csrf_token %}
@@ -87,7 +191,7 @@
                     {{ post.as_p }}
         
                 </div>
-                <button class="btn btn-light">
+                <button class="btn btn-light" type="submit">
                     Post
                 </button>
             </form>
@@ -137,8 +241,9 @@
         </div>
         <!-- <hr> -->
         {% if not is_visitor %}
-        <h1>your posts</h1>
+        <!-- <h1>your posts</h1> -->
         {% endif %}
+        <hr>
 
 
     
@@ -155,9 +260,9 @@
         </div>
        
         {% elif post.is_accepted %}
-        <div class="col-xs-12 col-sm-6 col-md-4" style="margin: 80px;">
+        <div class="col-xs-12 col-sm-6 col-md-4" >
 
-            <div class="card" style="width: 200px; height: 300px;">
+            <div class="card">
                 <img src="{{post.product_image.url}}" class="card-img-top" alt="" height="300px">
                 <hr>
                 <div class="card-body">
@@ -191,16 +296,7 @@
                             Book
 
                         </button>
-                    </form>
-
-                    <!-- <form action="/user/item" method="POST">
-                        {% csrf_token %}
-                        <button class="btn btn-success" name='product_id' value="{{ post.id}}">
-                            Book
-                        </button>
-                    </form> -->
-                   
-                  
+                    </form>   
 
                     {% endif %}
                  
@@ -217,6 +313,11 @@
               
     
         {% endfor %}
+
+        {% if not posts %}
+            <h1 class="text-primary">you dont have any posts yet</h1>
+       
+        {% endif %}
     
        
 
@@ -229,6 +330,7 @@
 
    
     <script src="{% static 'app/script/user_profile.js' %}"></script>
+    <script src="{%  static 'app/script/home_page.js' %} "></script>
     
 </body>
 </html>

@@ -1,0 +1,157 @@
+nav {
+    width: 100%;
+}
+
+.user-info {
+    position: relative;
+    margin-top: 30%;
+}
+
+
+.user-info > i {
+    
+    padding-left: 15%;
+    padding-top: 10px;
+    margin-top: 5px;
+    font-size: 20px;
+
+}
+
+
+form {
+    position: relative;
+}
+.user-info > h1 {
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    text-transform: capitalize;
+}
+
+form > h1, .user-location > h1  {
+    text-transform: capitalize;
+}
+
+.user-location {
+    position: relative;
+    margin-left: 20%;
+}
+
+.user-info::after {
+    content: '';
+    position: absolute;
+    border:1px solid gray;
+    width: 1px;
+    height: 200%;
+    transform: rotate(180deg);
+    right:  0%;
+    top: -45%;
+    
+}
+
+form::after {
+    content: '';
+    position:absolute;
+    border:1px solid gray;
+    top: 2%;
+    right: -10%;
+    transform: rotate(180deg);
+    height: 99%;
+    width: 1px;
+
+}
+
+
+@keyframes dropdown-show {
+
+    from {
+        height: 0px;
+        display: none;
+
+    }
+    to {
+        height: 150px;
+        display: block;
+
+    }
+    
+}
+
+.address {
+    display: none;
+}
+
+@keyframes dropdown-hide {
+    from {
+        height: 150px;
+        visibility: visible;
+
+    }
+    to {
+        height: 0px;
+        visibility: hidden;
+
+    }
+    
+}
+
+.form-control {
+    border-radius: 15px;
+}
+
+@media screen and (max-width:600px) {
+    .user-info::after {
+        display: none;
+    }
+    #main {
+        display: none;
+    }
+    .address {
+        display: block;
+        margin-left: -20%;
+    }
+
+    .user-info > i {
+        margin-left: -35%;
+    }
+
+    form::after {
+        display: none;
+    }
+    img {
+        height: 100px;
+        width: 100px;
+    }
+    form {
+        margin-left: -10%;
+    }
+
+    .form-control {
+        width: 50%;
+    }
+
+    form > button {
+        margin: 10px;
+        margin-left: 20%;
+    }
+
+    .user-location {
+        margin-left: -10%;
+    }
+
+    .user-info {
+        margin-top: 0%;
+    }
+
+    form > h1, .user-location > h1  {
+        padding-left: 0%;
+    }
+
+    .user-location {
+        display: none;
+    }
+
+   
+  
+    
+}

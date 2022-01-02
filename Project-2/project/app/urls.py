@@ -10,7 +10,7 @@ urlpatterns=[
     path('home/',views.HomePageView.as_view(),name='home'),
     path('',RedirectView.as_view(url='home')),
     path('accounts/login/',views.login_view,name='login'),
-    path('accounts/login/',views.logout_view,name='logout'),
+    path('accounts/logout/',views.logout_view,name='logout'),
     path('signup/',views.signin_view,name='signup'),
     path('profile/',views.profile,name='profile'),
     path('usres/',views.Users.as_view(),name='users'),
@@ -26,6 +26,7 @@ urlpatterns=[
     path('user/post/reject',views.RejectedPosts.as_view(),name='reject_post'),
     path('home/<str:category>',views.sort_item,name='category'),
     path('user/item/<int:id>',views.booked_item_view,name='item-detail'),
+    path('profile/<int:id>/',views.profile_edit,name='user-edit'),
     path('users/user/<int:pk>',views.UserDetail.as_view(),name='user'),
 
 

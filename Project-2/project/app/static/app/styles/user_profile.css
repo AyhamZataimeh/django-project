@@ -16,6 +16,36 @@ body {
     
 }
 
+@keyframes dropdown-show {
+    from {
+        height: 0px;
+        display: none;
+
+    }
+    to {
+        height: 150px;
+        display: block;
+
+    }
+    
+}
+
+@keyframes dropdown-hide {
+    from {
+        height: 150px;
+        visibility: visible;
+
+    }
+    to {
+        height: 0px;
+        visibility: hidden;
+
+    }
+    
+}
+
+
+
 nav i {
     cursor: pointer;
     padding: 5px;
@@ -26,15 +56,11 @@ nav i {
 }
 
 .profile {
-    /* background-image: url('https://media.istockphoto.com/photos/adult-and-child-hands-holiding-red-heart-health-care-love-and-family-picture-id823097608?k=20&m=823097608&s=612x612&w=0&h=6yC4hISh77x3ue9kufCq9XOW3pldrT8O7bRbcK6gKNc='); */
-    /* background-image: url('https://www.canadahelps.org/media/charity_clipart.jpg'); */
-    /* background-image: url('https://media.istockphoto.com/photos/the-concept-of-unity-cooperation-teamwork-and-charity-picture-id1290692045?b=1&k=20&m=1290692045&s=170667a&w=0&h=mjKRZccVf2DDaVN83LFmpunPjuBNrCO3kuetFCPm45g='); */
-    /* background-image: url('https://images.pexels.com/photos/3184434/pexels-photo-3184434.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940&fbclid=IwAR1544vCM9OAo2Q437NlmQ6SqMW-9pYq_SBsga0NM8LI13ikBjkb8MzFzzs'); */
+  
     background-image: url('https://images.pexels.com/photos/3184424/pexels-photo-3184424.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940&fbclid=IwAR2eCRmk5xbIm5QEDZ17txIqdnIk9PJxpkliOZz10nC5ihcvXo4f_9ITBik');
      position: relative;
     background-repeat: no-repeat;
-    /* background-size: contain; */
-    background-size: 100% 100%;
+    background-size: cover;
     width: 100%;
     height:400px;
 
@@ -42,21 +68,14 @@ nav i {
 }
 
 aside {
-    padding: 5px;
-    width: fit-content;
-    position: absolute;
-    position: fixed;
-    top: 8%;
-    right: 0%;
-    z-index: 1;
-    width: 25%;
-    /* animation: nav-side .5s linear both; */
+   
     visibility: hidden;
+    z-index: 2;
 }
 
 @keyframes nav-side {
     from{ 
-        transform: translateX(100%);
+        transform: translateX(-100%);
         
 
 
@@ -82,7 +101,7 @@ aside {
 
     }
     to {
-        transform: translateX(100%);
+        transform: translateX(-100%);
         
         visibility: hidden;
 
@@ -119,7 +138,6 @@ aside {
 
 .profile-info h1 {
     color:black ;
-    /* font-weight: bold; */
     text-transform: capitalize;
 }
 
@@ -136,15 +154,14 @@ aside {
     margin-bottom: 10px; 
     cursor: pointer;
     width: 200px;
-    height: 250px;
-    position: relative;
-    transition: .5s;
+    height: 450px;
 
 }
-
-.card hr {
-    color: red;
+.card> img {
+    height: 300px;
 }
+
+
 
 
 
@@ -164,9 +181,6 @@ aside {
     visibility: hidden;
 }
 
-.user-post>button {
-    text-align: center;
-}
 
 
 
@@ -207,6 +221,11 @@ aside {
 
 .user-post > form {
     display: inline-block;
+
+}
+
+.user-post > .post {
+    display: none;
 }
 
 form>ul {
@@ -215,10 +234,34 @@ form>ul {
 }
 
 @media screen and (max-width:600px) {
+    .profile {
+        position: relative;
+    }
+    .profile {
+        /* background-color: red; */
+        background-size: 100% 100%;
+    }
+
     .profile-image > img {
+     
         width: 200px;
         height: 200px;
-        /* z-index: -1; */
+    }
+
+    .profile > .profile-image {
+         /* display: none; */
+        position:absolute;
+        bottom: 0%;
+        left: 50%;
+        width: 200px;
+        height: 200px;
+    }
+
+    .profile > .profile-info {
+        position: absolute;
+        bottom: -55%;
+        text-align: center;
+        /* left: 20%; */
     }
     .add {
         display:  none;
@@ -226,13 +269,29 @@ form>ul {
 
     .user-post {
         position: absolute;
+        border:none;
+        color: black;
         left: 40%;
-        margin-top: 50px;
+        margin-top: 30%;
         visibility: visible;
-        width: 300px;
+        width: 100%;
+        height: 200px;
+    }
+    .user-post > .post {
+        display: block;
     }
 
+    .user-post > button {
+        position: absolute;
+        left: 0%;
+        top:50%;
+        display: none;
+    }
+   
     .user-post>button[type='button'] {
+        display: none;
+    }
+    .user-post > button[type='submit'] {
         display: none;
     }
 
@@ -243,19 +302,16 @@ form>ul {
     hr {
         display: none;
     }
-    aside {
-        width: 100%;
-        z-index: 2;
-        overflow: hidden;
-        
-
-    }
+    /* .card {
+        margin-top: 200px;
+        margin-left: -20%;
+    } */
+   
    
 
 
     @keyframes nav-side {
         from{ 
-            /* transform: translateY(-20%); */
             height: 0px;
             
     
@@ -263,7 +319,6 @@ form>ul {
     
         }
         to {
-            /* transform: translateY(0%); */
             height:400px;
             visibility: visible;
     
@@ -285,6 +340,14 @@ form>ul {
         }
         
     }
+}
+
+
+
+.text-primary {
+    text-align: center;
+   
+    /* font-size: 90px; */
 }
 
 

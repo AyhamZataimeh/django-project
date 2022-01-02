@@ -32,35 +32,38 @@ class UserSignup(forms.ModelForm):
     password=forms.CharField(label='Password',widget=forms.PasswordInput)
     password2=forms.CharField(label=' Confrim Password',widget=forms.PasswordInput)
     phone_number=forms.CharField(label='Phone Number')
-    # gender=forms.CharField(label='Gender')
+    address=forms.CharField(label='Address')
+    st_name=forms.CharField(label='Street')
+   
     
     username.widget.attrs['class']='form-control'
     email.widget.attrs['class']='form-control'
     password.widget.attrs['class']='form-control'
     password2.widget.attrs['class']='form-control'
     phone_number.widget.attrs['class']='form-control'
-    # gender.widget.attrs['class']='form-check-input'
-
-    def __init__(self,*args,**kwargs):
-        super(UserSignup,self).__init__(*args,**kwargs)
-        
-        # for field in self.visible_fields():
-        #     field.field.widget.attrs['class']='form-control'
-
-
+    address.widget.attrs['class']='form-control'
+    st_name.widget.attrs['class']='form-control'
+  
     
     class Meta:
         model=User
-        fields=['username','email','password','password2','gender','phone_number']
+        fields=['username','email','password','password2'
+        ,'gender','phone_number','city','address','st_name']
         widgets={
-            'gender':forms.widgets.RadioSelect
+            'gender':forms.widgets.RadioSelect,
+
+            
+            
+
         }
+        
     def clean(self,*args,**kwargs):
         username=self.cleaned_data['username']
         email=self.cleaned_data['email']
         password=self.cleaned_data['password']
         password2=self.cleaned_data['password2']
         phone_number=self.cleaned_data['phone_number']
+        print(username)
 
 
         if password != password2:
@@ -84,44 +87,54 @@ class UserSignup(forms.ModelForm):
 
 
 class UserUpdate(forms.ModelForm):
-    username=forms.CharField(max_length=80,label='new name')
-    email=forms.EmailField(max_length=80,label='new email')
-    phone_number=forms.CharField(max_length=80,label='new phone number')
+    username=forms.CharField(max_length=80,label='new name', required=False)
+    email=forms.EmailField(max_length=80,label='new email',required=False)
+    phone_number=forms.CharField(max_length=80,label='new phone number',required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(UserUpdate, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+
+
 
     class Meta:
         model=User
-        fields=['username','email','phone_number']
+        fields=['username','email','phone_number','city','address','st_name']
         labels={
             'username':'New name',
             'email':'New email',
-            'phone_number':'New phone number'
+            'phone_number':'New phone number',
+            'city':'new address',
+            'address':'new address',
+            'st_name':'new street'
         }
 
-    def clean(self,*args,**kwargs):
-        # username=self.cleaned_data['username']
-        # email=self.cleaned_data['email']
-        # phone_number=self.cleaned_data['phone_number']
+    # def clean(self,*args,**kwargs):
+    #     username=self.cleaned_data['username']
+    #     email=self.cleaned_data['email']
+    #     phone_number=self.cleaned_data['phone_number']
+    #     check_username=User.objects.filter(username=username)
+    #     check_email=User.objects.filter(email=email)
+    #     check_phone_number=User.objects.filter(phone_number=phone_number)
 
-        # check_username=User.objects.filter(username=username)
-        # check_email=User.objects.filter(email=email)
-        # check_phone_number=User.objects.filter(phone_number=phone_number)
+    #     if check_username.exists():
+    #         raise forms.ValidationError('name already exsit')
 
-        # if check_username.exists():
-        #     raise forms.ValidationError('name already exsit')
+    #     if check_email.exists():
+    #         raise forms.ValidationError('email already exsit')
 
-        # if check_email.exists():
-        #     raise forms.ValidationError('email already exsit')
+    #     if check_phone_number.exists():
+    #         raise forms.ValidationError('phone number already exsit')        
 
-        # if check_phone_number.exists():
-        #     raise forms.ValidationError('phone number already exsit')        
-
-        return super(UserUpdate,self).clean(*args,**kwargs)    
+    #     return super(UserUpdate,self).clean(*args,**kwargs)    
    
         
 
 class ProfileImage(forms.ModelForm):
 
     image=forms.ImageField()
+    
     class Meta:
         model=ProfileImage
         fields=['image']
@@ -139,7 +152,7 @@ class UserPosts(forms.ModelForm):
             'category':'product_category'
         }
 
-class Booked(forms.ModelForm):
-    class Meta:
-        model=Products
-        fields=['is_booked']
+
+
+
+        

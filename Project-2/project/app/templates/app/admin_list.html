@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="{% static 'app/styles/home_page.css'%}">
+    <link rel="stylesheet" href="{% static 'app/styles/posts.css' %}">
     <title>Document</title>
 </head>
 <body>
@@ -19,20 +21,127 @@
     {% endif %}
 
     <nav class="navbar bg-light sticky-top">
-        <a href="{% url 'home' %}" >
-            <i class="fas fa-home fa-2x btn btn-primary " ></i>
-            
+        {% if user.is_authenticated %}
+        <i id='aside-show'  class="fas fa-bars fa-2x"></i>
+        <a href="{% url 'home' %}" class="navbar-brand">
+            Home
         </a>
-        
+        <h1 class="navbar-brand">
+            Online Donation
+        </h1>
+      
+        <ul class="dropdown navbar-brand">
+            <button style="border:none;" class="btn btn-light dropdown-toggle nav-link" id='dropdown-display'>
+                More
+            </button>
+          
+            <div class="dropdown-menu" id="dropdown-menu">
+                <li>
+                    <a class="nav-link dropdown-item" href="{% url 'profile' %}">
+                    <i class="fas fa-user"></i>
+
+                        Profile
+                    </a>
+                    
+                </li>
+              
+                {% if user.is_admin %}
+              
+                
+                <li>
+                    <a class="nav-link dropdown-item" href="{% url 'block-users' %}">
+                        <i class="fas fa-user-lock"></i>
+                        Block list
+                    </a>
+                </li>
+                {% endif %}
+                <li>
+                    <a href="{% url 'users' %}" class="nav-link dropdown-item ">
+                        <i class="fas fa-users"></i>
+                        Users
+                    </a>
+                </li>
+               
+                <li>
+                    <a class="nav-link dropdown-item" href="{% url 'logout' %}">
+                    <i class="fas fa-sign-out-alt"></i>
+
+                        Logout
+                    </a>
+                </li>
+           
+        {% else %}
+        <a href="{% url 'login' %}" class="nav-link">
+            <i class="fas fa-sign-in-alt"></i>
+            login
+
+        </a>
+        {% endif %}
+
+
     </nav>
+    
+
+    <aside id='aside' >
+        <ul class="list-group">
+           
+            <li>
+                <a href="{% url 'home' %}" class="list-group-item list-group-item-action text-primary">
+            <i class="fas fa-home " ></i>
+            Home
+
+
+            
+                </a>
+
+               
+            </li>
+            <li>
+                <a class="list-group-item list-group-item-action text-primary" href="{% url 'profile' %}">
+                <i class="fas fa-user"></i>
+
+                    Profile
+                </a>
+                
+            </li>
+          
+            {% if user.is_admin %}
+            <li>
+                <a class="list-group-item list-group-item-action text-primary" href="{% url 'block-users' %}">
+                    <i class="fas fa-user-lock"></i>
+                    Block list
+                </a>
+            </li>
+            {% endif %}
+            <li>
+                <a  class="list-group-item list-group-item-action text-primary" 
+                href="{% url 'logout' %}">
+                <i class="fas fa-sign-out-alt"></i>
+
+                    Logout
+                </a>
+            </li>
+          
+        </ul>
+    </aside>
     <div class="container">
         <div class="row">
-            <form action="/user/accept/all" method="POST">
-                {% csrf_token %}
-                <button class="btn btn-success">
-                    Accept all
-                </button>
-            </form>
+            <div class="posts">
+                <form action="/user/accept/all" method="POST">
+                    {% csrf_token %}
+                    <button class="btn btn-success">
+                        Accept all
+                    </button>
+                </form>
+    
+                <form action="/user/reject/all">
+                    <button class="btn btn-danger">
+                        Reject All
+                    </button>
+                </form>
+
+            </div>
+        
             {% for user in users %}
             <div class="col-xs-12 col-sm-6 col-md-4">
                 {% if user.is_pending %}
@@ -68,20 +177,22 @@
                       
                     </div>
                 </div>
-                {% elif user.is_accepted %}
-                <h1>{{ user.user.username}} post accepted</h1>
-                {% else %}
-                <h1>{{ user.user.username}} post rejected</h1>
+             
                 {% endif %}
 
 
                         </div>
                         
             {% endfor %}
+            {% if not users %}
+            <h1 class="no-posts">No posts yet!!</h1>
+            {% endif %}
           
 
         </div>
     </div>
+
+    <script src="{% static 'app/script/home_page.js' %}"></script>
 
 
     

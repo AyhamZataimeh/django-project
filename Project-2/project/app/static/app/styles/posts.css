@@ -1,0 +1,43 @@
+.posts {
+    margin-top: 2%;
+    display: flex;
+    justify-content: space-around;
+    text-transform: capitalize;
+}
+
+.no-posts {
+    text-transform: capitalize;
+    text-align: center;
+}
+
+
+
+@keyframes dropdown-show {
+    from {
+        height: 0px;
+        display: none;
+
+    }
+    to {
+        height: 170px;
+        display: block;
+
+    }
+    
+}
+
+@keyframes dropdown-hide {
+    from {
+        height: 170px;
+        visibility: visible;
+
+    }
+    to {
+        height: 0px;
+        visibility: hidden;
+
+    }
+    
+}
+
+

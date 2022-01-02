@@ -24,21 +24,23 @@ class UserAccountManager(BaseUserManager):
         return user   
     
 
-male='male'
-female='female'
-gender=(
-    (male,'male'),
-    (female,'female')
-)
 
 class UserAccount(AbstractBaseUser):
     class Gender(models.TextChoices):
         male='male',_('male')
         female='female',_('female')
+
+    class Address(models.TextChoices):
+        amman='amman',_('Amman')
+        jarash='jarash',_('Jarash')    
+  
     username=models.CharField(max_length=80,unique=True)
     email=models.EmailField(max_length=80,unique=True,verbose_name='Email')
     phone_number=models.CharField(max_length=10,verbose_name='Phone Number',unique=True)
     password=models.CharField(max_length=256,verbose_name='Password')
+    city=models.CharField(max_length=80,choices=Address.choices,default='')
+    address=models.CharField(max_length=80,default='')
+    st_name=models.CharField(max_length=80,default='')     
     gender=models.CharField(max_length=10,choices=Gender.choices,null=True)
     login_date=models.DateField(verbose_name='Login date',auto_now_add=True)
     last_login=models.DateField(verbose_name='Last Login',auto_now=True)
@@ -129,3 +131,5 @@ class BlockUsers(models.Model):
     def __str__(self) -> str:
         return f'{self.username}'
 # Create your models here.
+
+
