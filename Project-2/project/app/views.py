@@ -1,3 +1,4 @@
+from os import path
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import authenticate,get_user_model,login,logout
 from django.contrib import messages
@@ -30,7 +31,6 @@ class HomePageView(ListView):
     except:
         pass            
         
-
 def sort_item(request,category):
     get_items=Products.objects.filter(category=category)
     context={
@@ -48,6 +48,16 @@ def booked_item_view(request,id):
     return render(request,'app/item-details.html',context)    
 
 
+class UsersDetails(ListView):
+    model=User
+    template_name='app/users_details.html'
+    context_object_name='users'
+    def get_context_data(self, **kwargs):
+        context= super().get_context_data(**kwargs)       
+        users=User.objects.filter(is_admin=False)
+        context['users']=users
+        return context
+
 class BookItemView(View):
 
     def post(self,request):
@@ -63,6 +73,8 @@ class BookItemView(View):
             return redirect(f'{path}/{owner.id}')         
         elif path=='/user/item':
             return redirect(f'{path}/{product_id}')
+     
+
 
         # print()
 
@@ -212,6 +224,7 @@ def profile_edit(request,id):
 @login_required
 def profile(request):
     find_user=get_object_or_404(User,username=request.user.username)
+    print(find_user.username)
   
     if request.method == 'POST':
         posts=Products.objects.filter(user=find_user)
@@ -222,6 +235,8 @@ def profile(request):
         if user_post.is_valid():
             post=user_post.save(commit=False)
             post.user=find_user
+            find_user.total_posts+=1
+            find_user.save()
             post.save()
             messages.success(request,' You have posted ')
             return redirect('profile')
@@ -256,20 +271,31 @@ class AcceptedPosts(View):
     def post(self,request):
         product_id=request.POST['product_id']
         user_product=get_object_or_404(Products,pk=product_id)
+        user=get_object_or_404(User,pk=user_product.user.id)
+        user.accepted_posts+=1
         user_product.is_accepted=True
         user_product.is_pending=False        
         user_product.save()
+        user.save()
         return redirect('admin-list')
 
 class AcceptAllPosts(View):
 
     def post(self,request):
-        pending_posts=Products.objects.filter(is_pending=True)
-        for pending_post in pending_posts:
-            pending_post.is_accepted=True
-            pending_post.is_pending=False
-            pending_post.save()
+        posts=Products.objects.filter(is_pending=True)
+        users=User.objects.filter(is_admin=False)
+        for post in posts:
+            user=get_object_or_404(User,pk=post.user.id)
+            post.is_accepted=True
+            post.is_pending=False
+            user.accepted_posts+=1
+            user.save()
+            post.save()
 
+
+        # for user in users:
+        #     user.accepted_posts+=1
+        #     user.save()
 
         return redirect('admin-list')
 
@@ -277,10 +303,17 @@ class RejectAllPost(View):
     
     def post(self,request):
         posts=Products.objects.filter(is_pending=True)
+        users=User.objects.filter(is_admin=False)
         for post in posts:
+            user=get_object_or_404(User,pk=post.user.id)
             post.is_pending=False
             post.is_rejected=True
+            user.rejected_post+=1
+            user.save()
             post.save()
+
+     
+
         return redirect('admin-list')   
 
 
@@ -298,6 +331,7 @@ class Users(ListView):
         return context
 
 class BlockUserView(View):
+
     def post(self,request):
         user_id=request.POST['user_id']
         user=get_object_or_404(User,pk=user_id)
@@ -310,7 +344,14 @@ class BlockUserView(View):
         block_user.profile_image=profile_image
         user.save()
         block_user.save()
-        return redirect('users')
+        # path=self.request.path
+        # print(path)
+        # if path =='/users/':
+        #     return redirect(path)
+        # elif path == '/users/details/':
+        return redirect('users-details')    
+
+
 
 
 class UserDetail(DetailView):
@@ -370,9 +411,14 @@ class UnblockUser(View):
         get_user.is_blocked=False
         get_user.rejected_post=0
         get_user.save()
-        # unblock_user.save()
+        path=self.request.path
+        print(path)
         messages.success(request,f'{get_user.username} has been remove from the block list ')
-        return redirect('block-users')
+        if path =='/unblock-users/':
+            return redirect('block-users')
+        elif path =='/unblock-user/':
+            return redirect('users-details')        
+        # return redirect('user-details')
 
 
 

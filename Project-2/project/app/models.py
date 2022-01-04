@@ -45,7 +45,10 @@ class UserAccount(AbstractBaseUser):
     login_date=models.DateField(verbose_name='Login date',auto_now_add=True)
     last_login=models.DateField(verbose_name='Last Login',auto_now=True)
     total_liked=models.IntegerField(default=0)
+    total_posts=models.IntegerField(default=0)
     rejected_post=models.IntegerField(default=0)
+    accepted_posts=models.IntegerField(default=0)
+
     is_blocked=models.BooleanField(default=False)
     is_admin=models.BooleanField(default=False)
     is_staff=models.BooleanField(default=False)
@@ -127,7 +130,6 @@ class BlockUsers(models.Model):
     email=models.CharField(max_length=80)
     phone_number=models.CharField(max_length=80)
     profile_image=models.OneToOneField(ProfileImage,on_delete=models.CASCADE,null=True)
-
     def __str__(self) -> str:
         return f'{self.username}'
 # Create your models here.

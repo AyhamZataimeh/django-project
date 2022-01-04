@@ -297,8 +297,13 @@ aside {
         position: absolute;
     } */
     aside {
+        z-index: 1;
         position: fixed;
         
+    }
+
+    .card {
+        z-index: -1;
     }
 
     

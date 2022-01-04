@@ -110,29 +110,9 @@ class UserUpdate(forms.ModelForm):
             'st_name':'new street'
         }
 
-    # def clean(self,*args,**kwargs):
-    #     username=self.cleaned_data['username']
-    #     email=self.cleaned_data['email']
-    #     phone_number=self.cleaned_data['phone_number']
-    #     check_username=User.objects.filter(username=username)
-    #     check_email=User.objects.filter(email=email)
-    #     check_phone_number=User.objects.filter(phone_number=phone_number)
-
-    #     if check_username.exists():
-    #         raise forms.ValidationError('name already exsit')
-
-    #     if check_email.exists():
-    #         raise forms.ValidationError('email already exsit')
-
-    #     if check_phone_number.exists():
-    #         raise forms.ValidationError('phone number already exsit')        
-
-    #     return super(UserUpdate,self).clean(*args,**kwargs)    
-   
         
 
 class ProfileImage(forms.ModelForm):
-
     image=forms.ImageField()
     
     class Meta:

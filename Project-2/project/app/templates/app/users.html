@@ -51,6 +51,14 @@
                         Block list
                     </a>
                 </li>
+
+                <li>
+                    <a href="{% url 'users-details' %}" class="dropdown-item nav-link">
+                        <i class="fas fa-users-cog"></i>
+                        Users Details
+                    </a>
+                </li>
+                
                 {% endif %}
                 <li>
                     <a href="{% url 'users' %}" class="nav-link dropdown-item ">
@@ -147,6 +155,13 @@
                 <a class="list-group-item list-group-item-action text-primary" href="{% url 'block-users' %}">
                     <i class="fas fa-user-lock"></i>
                     Block list
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'users-details' %}" class="list-group-item list-group-item-action text-primary">
+                    <i class="fas fa-users-cog"></i>
+                    Users Details
                 </a>
             </li>
             {% endif %}

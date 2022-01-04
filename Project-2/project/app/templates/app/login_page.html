@@ -6,6 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+   
     <link rel="stylesheet" href="{% static 'app/styles/login_page.css' %}">
     <title>Document</title>
 </head>
@@ -45,9 +47,9 @@
                 Login
             </button>
         </form>
-        <span>Don't have account?
+        <span class="sign-in">Don't have account?
             <a href="{% url 'signup' %}">
-                Sign in
+                Sign up
             </a>
 
         </span>
@@ -56,8 +58,101 @@
 
     </div>
 
-  
-    
+    <footer>
+        <div class="About-us">
+            <h1>About us</h1>
+            <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum modi dolor, saepe sequi nostrum suscipit expedita optio tenetur corrupti quam inventore reprehenderit hic debitis, voluptate quis, nam aspernatur officia ea.
+            </p>
+
+        </div>
+        <div class="follow-us">
+            <h1>Follow us</h1>
+            <a href="">
+                <i class="fab fa-facebook-f " id='facebook' >
+                    <span>
+                        Follow us on facebook
+
+
+                    </span>
+
+                </i>
+
+
+            </a>
+           
+            <br>
+            <a href="">
+              
+                <i class="fab fa-linkedin-in " id='linkedin'>
+                    <span>
+                    Follow us on linkedin
+
+
+                    </span>
+                </i>
+
+              
+            </a>
+            <br>
+           
+            
+            <a href="">
+                <i class="fab fa-twitter">
+                    <span>
+                    Follow us on tiwitter
+
+
+                    </span>
+
+                </i>
+            </a>
+            <br>
+            <a href="">
+                <i class="fab fa-instagram" id='instagram'>
+                    <span>
+                        follow us on instagram
+                    </span>
+                </i>
+          
+
+
+            </a>
+
+        </div>
+        <div class="contact-us">
+            <h1>contact us</h1>
+            <a href="tel:+9620778158732">
+                <i class="fas fa-phone-alt ">
+                    call us on 
+                </i>
+
+            </a>
+            
+         
+            <br>
+            <a href="mailto:{{ user.email }}">
+                <i class="fas fa-envelope ">
+                    message us
+                </i>
+
+            </a>
+        
+           
+            <br>
+            <i class="fas fa-map-marker-alt ">
+                Amman , Jordan
+            </i>
+
+        </div>
+        <i class="far fa-copyright" id='copyright'>
+            All right are reserved 2020/2021
+            Ayham zataimeh
+        </i>
+
+    </footer>
+   
+ 
     
 </body>
 </html>
