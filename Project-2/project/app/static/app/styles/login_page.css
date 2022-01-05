@@ -103,7 +103,7 @@ form input {
     
 }
 .parent button {
-    margin: 20px 70px auto;
+    margin: 40px 70px auto;
     position: relative;
     background-color: transparent;
     outline: none;
@@ -186,6 +186,12 @@ form > h1::selection {
 .parent > span::selection {
     background-color: transparent;
 
+}
+
+.password {
+    position: absolute;
+    top: 63%;
+    left: 10%;
 }
 
 footer {

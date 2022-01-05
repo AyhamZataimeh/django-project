@@ -1,3 +1,4 @@
+{% load static%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,37 +6,201 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'app/styles/home_page.css' %}">
+    <link rel="stylesheet" href="{% static 'app/styles/item-details.css' %}">
     <title>{{ product.product }}</title>
 </head>
 <body>
-    <nav class="navbar navbar bg-light">
-        <a href="{% url 'home' %}" class="nav-link">
+    <nav class="navbar bg-light sticky-top">
+        {% if user.is_authenticated %}
+        <i id='aside-show'  class="fas fa-bars fa-2x"></i>
+        <a href="{% url 'home' %}" class="navbar-brand">
             Home
         </a>
+        <h1 class="navbar-brand">
+            Online Donation
+        </h1>
+      
+        <ul class="dropdown navbar-brand">
+            <button style="border:none;" class="btn btn-light dropdown-toggle nav-link" id='dropdown-display'>
+                More
+            </button>
+          
+            <div class="dropdown-menu" id="dropdown-menu">
+                <li>
+                    <a class="nav-link dropdown-item" href="{% url 'profile' %}">
+                    <i class="fas fa-user"></i>
+
+                        Profile
+                    </a>
+                    
+                </li>
+              
+                {% if user.is_admin %}
+                <li>
+                    <a class="nav-link dropdown-item" href="{% url 'admin-list' %}">
+                    <i class="fas fa-users"></i>
+
+                        Posts
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link dropdown-item" href="{% url 'block-users' %}">
+                        <i class="fas fa-user-lock"></i>
+                        Block list
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'users-details' %}" class="dropdown-item nav-link">
+                        <i class="fas fa-users-cog"></i>
+                        Users Details
+                    </a>
+                </li>
+               
+          
+                {% endif %}
+                <li>
+                    <a href="{% url 'users' %}" class="nav-link dropdown-item ">
+                        <i class="fas fa-users"></i>
+                        Users
+                    </a>
+                </li>
+             
+            
+                <li>
+                    <a class="nav-link dropdown-item" href="{% url 'logout' %}">
+                    <i class="fas fa-sign-out-alt"></i>
+
+                        Logout
+                    </a>
+                </li>
+              
+
+            </div>
+
+          
+        </ul>
+        {% else %}
+        <a href="{% url 'login' %}" class="nav-link">
+            <i class="fas fa-sign-in-alt"></i>
+            login
+
+        </a>
+        {% endif %}
+
+
     </nav>
-    <h1>
-        {{ product.product }}
-    </h1>
+    
 
-    <img src="{{ product.product_image.url }}" alt="">
-    <h1>
-        contact: {{ product.user.phone_number }}
-    </h1>
+    <aside id='aside' >
+        <ul class="list-group">
+           
+            <li>
+                <a href="{% url 'home' %}" class="list-group-item list-group-item-action text-primary">
+            <i class="fas fa-home " ></i>
+            Home
 
-    {% if product.is_booked %}
-    <h1>Booked</h1>
-    {% else %}
-    <h1>not booked yet</h1>
-    <form  method="POST" action="/user/item">
-        {% csrf_token %}
-        <input type="hidden" value='{{ product.id}}' name="product_id">
-        <button class="btn btn-primary" type="submit">
-            Book
-        </button>
 
-    </form>
-    {% endif %}
-  
+            
+                </a>
+
+               
+            </li>
+            <li>
+                <a class="list-group-item list-group-item-action text-primary" href="{% url 'profile' %}">
+                <i class="fas fa-user"></i>
+
+                    Profile
+                </a>
+                
+            </li>
+          
+            {% if user.is_admin %}
+            <li>
+                <a class="list-group-item list-group-item-action text-primary" href="{% url 'admin-list' %}">
+                <i class="fas fa-users"></i>
+
+                    Posts
+                </a>
+            </li>
+            <li>
+                <a class="list-group-item list-group-item-action text-primary" href="{% url 'block-users' %}">
+                    <i class="fas fa-user-lock"></i>
+                    Block list
+                </a>
+            </li>
+            
+                <li>
+                    <a href="{% url 'users-details' %}" class="list-group-item list-group-item-action text-primary">
+                        <i class="fas fa-users-cog"></i>
+                        Users Details
+                    </a>
+                </li>
+            {% endif %}
+            <li>
+                <a href="{% url 'users' %}" class="list-group-item list-group-item-action text-primary ">
+                    <i class="fas fa-users"></i>
+                    Users
+                </a>
+            </li>
+            <li>
+                <a  class="list-group-item list-group-item-action text-primary" 
+                href="{% url 'logout' %}">
+                <i class="fas fa-sign-out-alt"></i>
+
+                    Logout
+                </a>
+            </li>
+           
+
+           
+        </ul>
+    </aside>
+    <div class="card">
+        <div class="card-header">
+            <p class="text-primary">
+                {{ product.product }}
+
+            </p>
+
+
+        </div>
+        <img src="{{ product.product_image.url}}" alt="">
+        <div class="card-body">
+            <i class="fas fa-phone text-primary">
+                {{ product.user.phone_number }}
+            </i>
+            <i class="fas fa-user text-primary">
+                {{ product.user.username }} product
+            </i>
+            <p class="text-primary">
+                category: {{ product.category }}
+            </p>
+           
+        </div>
+        <div class="card-footer">
+            {% if product.is_booked %}
+            <p class="tex-primary">Booked</p>
+            {% else %}
+           
+            <form  method="POST" action="/user/item">
+                {% csrf_token %}
+                <input type="hidden" value='{{ product.id}}' name="product_id">
+                <button class="btn btn-primary" type="submit">
+                    Book
+                </button>
+        
+            </form>
+            {% endif %}
+            
+        </div>
+    </div>
+    
+   
+
+    <script src="{% static 'app/script/home_page.js' %} "></script>
       
 
     

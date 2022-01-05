@@ -1,0 +1,41 @@
+@keyframes dropdown-show {
+    from {
+        height: 0px;
+        display: none;
+
+    }
+    to {
+        height: 150px;
+        display: block;
+
+    }
+    
+}
+
+@keyframes dropdown-hide {
+    from {
+        height: 150px;
+        visibility: visible;
+
+    }
+    to {
+        height: 0px;
+        visibility: hidden;
+
+    }
+    
+}
+
+
+.card {
+    margin-left: 40px;
+}
+.card-header{
+    text-align: center;
+    /* background-color: red; */
+
+}
+
+.card-footer {
+    text-align: center;
+}
