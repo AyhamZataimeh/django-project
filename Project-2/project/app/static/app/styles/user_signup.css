@@ -59,7 +59,7 @@ form > input[type='email'] {
     border-radius: 20px;
 }
 
-form > ul > li:first-child{
+#id_gender>li:first-child{
     display: none;
 }
 nav > h2 {
@@ -67,7 +67,11 @@ nav > h2 {
   
 }
 
-
+.errorlist li {
+    padding-left: -90px;
+    display: block;
+    color: red;
+}
 
 footer {
     background-color:rgba(26, 26, 26,0.8)   ;

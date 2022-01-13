@@ -14,13 +14,13 @@
 <body>
 
      
-    <nav class="navbar bg-light sticky-top">
+    <nav class="navbar bg-primary sticky-top">
         {% if user.is_authenticated %}
-        <i id='aside-show'  class="fas fa-bars fa-2x"></i>
-        <a href="{% url 'home' %}" class="navbar-brand">
+        <i id='aside-show'  class="fas fa-bars fa-2x text-light"></i>
+        <a href="{% url 'home' %}" class="navbar-brand text-light">
             Home
         </a>
-        <h1 class="navbar-brand">
+        <h1 class="navbar-brand text-light">
             Online Donation
         </h1>
       
@@ -30,14 +30,7 @@
             </button>
           
             <div class="dropdown-menu" id="dropdown-menu">
-                <li>
-                    <a class="nav-link dropdown-item" href="{% url 'profile' %}">
-                    <i class="fas fa-user"></i>
-
-                        Profile
-                    </a>
-                    
-                </li>
+                
               
                 {% if user.is_admin %}
                 <li>
@@ -53,7 +46,31 @@
                         Block list
                     </a>
                 </li>
+                <a href="{% url 'users-details' %}" class="dropdown-item nav-link">
+                    <i class="fas fa-users-cog"></i>
+                    Users Details
+                </a>
+            </li>
                 {% endif %}
+                {% if not is_visitor %}
+                <li>
+                    <a href="{% url 'requested-book' %}" class="nav-link dropdown-item">
+                        <i class="fas fa-user-tag"></i>
+                        requests
+
+
+
+                    </a>
+            </li>
+            <li>
+                <a href="{% url 'booked_item' %}" class="nav-link dropdown-item">
+                    <i class="fas fa-user-check"></i>
+                    Booked item
+
+                </a>
+            </li>
+                {% endif %}
+             
                 <li>
                     <a href="{% url 'users' %}" class="nav-link dropdown-item ">
                         <i class="fas fa-users"></i>
@@ -107,14 +124,7 @@
 
                
             </li>
-            <li>
-                <a class="list-group-item list-group-item-action text-primary" href="{% url 'profile' %}">
-                <i class="fas fa-user"></i>
-
-                    Profile
-                </a>
-                
-            </li>
+           
           
             {% if user.is_admin %}
             <li>
@@ -130,7 +140,33 @@
                     Block list
                 </a>
             </li>
+            <a href="{% url 'users-details' %}" class="dropdown-item nav-link">
+                <i class="fas fa-users-cog"></i>
+                Users Details
+            </a>
+        </li>
             {% endif %}
+           
+
+            {% if not is_visitor %}
+                <li>
+                    <a href="{% url 'requested-book' %}" class="list-group-item list-group-item-action text-primary">
+                        <i class="fas fa-user-tag"></i>
+                        requests
+
+
+
+                    </a>
+            </li>
+            <li>
+                <a href="{% url 'booked_item' %}" class="list-group-item list-group-item-action text-primary">
+                    <i class="fas fa-user-check"></i>
+                    Booked item
+
+                </a>
+            </li>
+                {% endif %}
+             
             <li>
                 <a href="{% url 'user-edit' user.id %}" class="list-group-item list-group-item-action text-primary">
                     <i class="fas fa-user-edit"></i>
@@ -179,6 +215,7 @@
         </div>
 
     </div>
+    
 
    
         <div class="user-post" id="post">
@@ -206,19 +243,28 @@
        
      
    
-   
-
-
-   
-    {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-{{ message.tags }}">
-        {{ message }}
-    
-    </div>
-    {% endfor %}
-    {% endif %}
+            <div class="post-product">
+                <h1 class="post">Post a product</h1>
             
+                <form action="" method="POST" enctype="multipart/form-data" >
+                    {% csrf_token %}
+            
+                    <div class="form-group">
+                        {{ post.as_p }}
+            
+                    </div>
+                    <button class="btn btn-light" type="submit">
+                        Post
+                    </button>
+                </form>
+            
+            
+                 
+            
+                </div>
+   
+
+
             
 
 
@@ -226,7 +272,18 @@
 
         <div class="row">
             {% if not is_visitor %}
-        
+                                    
+                
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+            
+            
             <div class="col-xs-12 col-sm-6 col-md-4">
                 <div class="add" id="add">
                     <i class="fas fa-plus fa-3x"></i>
@@ -251,58 +308,70 @@
         {% for post in posts %}
         {% if post.is_pending %}
         <div class="col-xs-12 col-sm-6 col-md-4">
-            <div class="card">
-                <h1 class="card-body">
-                    Wating for admin response 
-                </h1>
+            <div class="item">
+                <div class="card">
+                    <h1 class="card-body">
+                        Wating for admin response 
+                    </h1>
+                </div>
+    
             </div>
+           
 
-        </div>
-       
+            </div>
+           
         {% elif post.is_accepted %}
         <div class="col-xs-12 col-sm-6 col-md-4" >
-
-            <div class="card">
-                <img src="{{post.product_image.url}}" class="card-img-top" alt="" height="300px">
-                <hr>
-                <div class="card-body">
-                    <h1 class="card-title">
+            <div class="item">
+                <div class="card">
+                    <div class="card-header text-primary">
                         {{ post.product }}
-                    </h1>
-                    <span class="text-muted">
-                       posted in: {{ post.post_date|date:"d ,M"}}
-                    </span>
-                    {% if not is_visitor %}
-                    <form method="POST" action="/user/unbook/item">
-                        {% csrf_token %}
-                        <input type="hidden" name="product_id" value="{{ post.id }}">
 
-                        <button class="btn btn-danger" type="submit">
-                            UnBooked
-
-                        </button>
-
-                    </form>
-                    {% endif %}
-                    {% if post.is_booked %}
-                    <h2>Booked</h2>
-                    {% elif is_visitor%}
-                    <a href="{% url 'item-detail' post.id %}" class="btn btn-success" style="float: left;">
-                        More info
-                    </a>
-                    <form action="/users/user" method="POST">
-                        {% csrf_token %}
-                        <button class="btn btn-success" name='product_id' value="{{ post.id }}">
-                            Book
-
-                        </button>
-                    </form>   
-
-                    {% endif %}
-                 
-                </div>
-            </div>
+                    </div>
+                    <img src="{{post.product_image.url}}" class="card-img-top" alt="" 
+                    height="250px" width="200px">
+                    <hr>
+                    <div class="card-body">
+                       
+                        <span class="text-muted">
+                           posted in: {{ post.post_date|date:"d ,M"}}
+                        </span>
+                        {% if not is_visitor and post.is_booked %}
+                        
+                        <form method="POST" action="/user/unbook/item">
+                            {% csrf_token %}
+                            <input type="hidden" name="product_id" value="{{ post.id }}">
     
+                            <button class="btn btn-danger" type="submit">
+                                UnBooked
+    
+                            </button>
+    
+                        </form>
+                        {% endif %}
+                        {% if post.is_booked %}
+                        <h2>Booked</h2>
+                        {% elif is_visitor%}
+                        <a href="{% url 'item-detail' post.id %}" class="btn btn-success" style="float: left;">
+                            More info
+                        </a>
+                        <form action="/users/user" method="POST">
+                            {% csrf_token %}
+                            <button class="btn btn-success" name='product_id' value="{{ post.id }}">
+                                Book
+    
+                            </button>
+                        </form>   
+    
+                        {% endif %}
+                     
+                    </div>
+                </div>
+        
+
+            </div>
+
+          
             </div>
     
 

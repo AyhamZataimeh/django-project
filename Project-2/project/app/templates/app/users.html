@@ -12,13 +12,13 @@
     <title>Users</title>
 </head>
 <body>
-    <nav class="navbar bg-light sticky-top">
+    <nav class="navbar bg-primary sticky-top">
         {% if user.is_authenticated %}
-        <i id='aside-show'  class="fas fa-bars fa-2x"></i>
-        <a href="{% url 'home' %}" class="navbar-brand">
+        <i id='aside-show'  class="fas fa-bars fa-2x text-light"></i>
+        <a href="{% url 'home' %}" class="navbar-brand text-light">
             Home
         </a>
-        <h1 class="navbar-brand">
+        <h1 class="navbar-brand text-light">
             Online Donation
         </h1>
       
@@ -61,11 +61,22 @@
                 
                 {% endif %}
                 <li>
-                    <a href="{% url 'users' %}" class="nav-link dropdown-item ">
-                        <i class="fas fa-users"></i>
-                        Users
+                    <a href="{% url 'requested-book' %}" class="nav-link dropdown-item ">
+                        <i class="fas fa-user-tag"></i>
+                        requests
+    
+    
+    
                     </a>
-                </li>
+            </li>
+            <li>
+                <a href="{% url 'booked_item' %}" class="nav-link dropdown-item ">
+                    <i class="fas fa-user-check"></i>
+                    Booked item
+    
+                </a>
+            </li>
+               
                
                 <li>
                     <a class="nav-link dropdown-item" href="{% url 'logout' %}">
@@ -74,37 +85,7 @@
                         Logout
                     </a>
                 </li>
-                <div class="dropdown-divider"></div>
-                <span class="nav-item dropdown-item" style="text-align: center;">sort by:</span>
-                <li>
-                    <a class="nav-link dropdown-item" href="{% url 'category' 'sports' %}">
-                        <i class="fas fa-running"></i>
-                    sports
-
-
-                      
-                    </a>
-                    
-                </li>
-                <li>
-                    <a href="{% url 'category' 'car parts' %}" class="nav-link dropdown-item">
-                        <i class="fas fa-car"></i>
-                        car parts
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'category' 'elctronics' %}" class="nav-link dropdown-item">
-                        <i class="fas fa-tablet-alt"></i>
-                        electroncs
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'category' 'clothes' %}" class="nav-link dropdown-item">
-                        <i class="fas fa-tshirt"></i>
-                        clothes
-                    </a>
-                </li>
-
+               
 
             </div>
 
@@ -120,8 +101,8 @@
 
 
     </nav>
-    <aside id='aside' >
-        <ul class="list-group">
+    <aside id='aside' class="bg-primary" >
+        <ul class="list-group bg-primary">
            
             <li>
                 <a href="{% url 'home' %}" class="list-group-item list-group-item-action text-primary">
@@ -216,44 +197,61 @@
         <div class="row">
             {% for user in users %}
             <div class="col-xs-12 col-sm-6 col-md-4">
-                <div class="card">
-                    <div class="card-header text-primary">
-                       
-                        {{ user.username }}
-                    </div>
-                    <img src="{{ user.profileimage.image.url }}" alt="" class="card-img-center ">
-                    <div class="card-body">
-
-                        <a class="btn btn-primary" style="float: left;" href="
-                                {% if request.user.username == user.username %}
-                                {% url 'profile' %}
-                            {% else %}
-                            {% url 'user' user.id %}
-                            {% endif %}" >
-                             Profile
-                        </a>
-                        {% if is_admin %}
-                        <form action="/block/user/"  method="POST">
-                            {% csrf_token %}
-                            <button class="btn btn-danger" name='user_id' value="{{ user.id }}">
-                                Block
-                            </button>
-                        </form>
-                        {% endif %}
-                       
-                        {% if request.user.username == user.username %}
-                        <p class="text-primary">
-                            You
-                        </p>
-                        {% endif %}
-                      
+                <div class="item">
+                    <div class="card">
+                        <div class="card-header text-primary">
+                           
+                            {{ user.username }}
+                        </div>
+                        <img src="{{ user.profileimage.image.url }}" alt="" class="card-img-top"
+                        width="200px" height="250px">
+                        <div class="card-body">
+    
+                            <a class="btn btn-primary" style="float: left; margin: 10px;" href="
+                                    {% if request.user.username == user.username %}
+                                    {% url 'profile' %}
+                                {% else %}
+                                {% url 'user' user.id %}
+                                {% endif %}" >
+                                 Profile
+                            </a>
+                            {% if is_admin %}
+                            {% if not user.is_blocked %}
+                          
                         
+                        
+                            <form action="/block/user/"  method="POST" style="margin: 10px;">
+                                {% csrf_token %}
+                                <button class="btn btn-danger" name='user_id' value="{{ user.id }}">
+                                    Block
+                                </button>
+                            </form>
+                            {% endif %}
+    
+                            {% endif %}
+                            {% if user.is_blocked %}
+                            <p class="text-muted pt-5 text-danger">
+                                Blocked!!
+                            </p>
+                            {% endif %}
+                           
+                            {% if request.user.username == user.username %}
+                            <p class="text-primary">
+                                You
+                            </p>
+                            {% endif %}
+                            
+                          
+                            
+                        </div>
+                        
+    
+                
+              
                     </div>
-                    
 
-            
-          
                 </div>
+               
             </div>
             {% endfor %}
             
@@ -261,7 +259,7 @@
     </div>
     
 
-    <script src="{% static 'app/script/users.js' %}"></script>
+    <script src="{% static 'app/script/home_page.js' %}"></script>
 
 
 

@@ -13,13 +13,13 @@
     <title>Document</title>
 </head>
 <body>
-    <nav class="navbar bg-light sticky-top">
+    <nav class="navbar bg-primary sticky-top">
         {% if user.is_authenticated %}
-        <i id='aside-show'  class="fas fa-bars fa-2x"></i>
-        <a href="{% url 'home' %}" class="navbar-brand">
+        <i id='aside-show'  class="fas fa-bars fa-2x text-light"></i>
+        <a href="{% url 'home' %}" class="navbar-brand text-light">
             Home
         </a>
-        <h1 class="navbar-brand">
+        <h1 class="navbar-brand text-light">
             Online Donation
         </h1>
       
@@ -197,7 +197,7 @@
                     </button>
                 </form>
                 {% else %}
-                <form action="/block/user/" method="POST">
+                <form action="/block/users/" method="POST">
                     {% csrf_token %}
 
                     <button class="btn btn-danger"  name='user_id' value="{{ user.id }}">
@@ -218,15 +218,19 @@
                     brown-star
                     {% elif  user.accepted_posts >= 3 and user.accepted_posts <= 4 %}
                     silver-star
-                    {% elif  user.accepted_posts >= 5%}
+                    {% elif  user.accepted_posts >= 5 %}
                     gold-star
+                    {% else %}
+                    star
                  {% endif %}" >
                  {% if user.accepted_posts >= 1 and user.accepted_posts <= 2 %}
-                    Brown user
+                    Bronze User
                  {% elif  user.accepted_posts >= 3 and user.accepted_posts <= 4 %}
-                    silver user
-                 {% elif  user.accepted_posts >= 5%}
-                 gold user
+                    Silver User
+                 {% elif  user.accepted_posts >= 5 %}
+                 Gold User
+                 {% else %}
+                 Fresh User
               {% endif %}
                 </i>
             </td>

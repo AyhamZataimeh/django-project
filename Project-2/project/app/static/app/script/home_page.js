@@ -38,9 +38,3 @@ asideDisplay.addEventListener('click',()=>{
     }
   
 })
-
-
-if (window.innerWidth>600) {
-    aside.style.display='none';
-
-}

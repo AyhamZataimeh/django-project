@@ -1,9 +1,10 @@
-from os import path
+from django.http import request
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import authenticate,get_user_model,login,logout
 from django.contrib import messages
+from django.views.generic.base import TemplateView
 from .forms import UserLogin,UserSignup,ProfileImage,UserUpdate, UserPosts
-from .models import Products, BlockUsers
+from .models import Products, BlockUsers, RequestedBook
 from .models import ProfileImage as UserProfile 
 from django.db.models import Q
 from django.views.generic import DetailView, ListView
@@ -41,9 +42,36 @@ def sort_item(request,category):
 
 
 def booked_item_view(request,id):
+    user=request.user
     product=Products.objects.get(pk=id)
+    get_user=get_object_or_404(User,pk=user.id)
+    check_users=RequestedBook.objects.filter(product_owner__id=product.id)
+    print(check_users)
+    has_requsted=False
+    is_accepted=False
+    is_rejected=False
+    for check_user in check_users:
+        if user.id == check_user.requestd_user.id:
+            has_requsted=True
+        
+        if check_user.is_accepted and user.id == check_user.requestd_user.id :
+            is_accepted=True
+            has_requsted=False    
+        
+        if check_user.is_rejected and user.id == check_user.requestd_user.id :
+            is_rejected=True   
+            has_requsted=False     
+        pass
+    
+        
+    # print(check_product)
     context={
-            'product':product
+            'product':product,
+            'has_requsted':has_requsted,
+            'is_accepted':is_accepted,
+            'is_rejected':is_rejected
+            
+          
         }
     return render(request,'app/item-details.html',context)    
 
@@ -64,6 +92,7 @@ class BookItemView(View):
 
         product_id=request.POST['product_id']
         product=get_object_or_404(Products,pk=product_id)
+
         product_owner_id=product.user.id
         owner=get_object_or_404(User,pk=product_owner_id)
         product.is_booked=True
@@ -87,27 +116,17 @@ class UnBookedItemView(View):
         print(product.product)
         product.is_booked=False
         product.save()
-        return redirect('profile')  
+        path=self.request.path
+        if path=='/unbook/item':
+            return redirect('booked_item')
+        elif path=='/user/unbook/item':    
+            return redirect('profile')  
         
 
   
 
 
-def home_page_view(request):
-    get_username=request.user.username
-    fetch_user=User.objects.get(username=get_username)
-    users=Products.objects.filter(~Q(user=fetch_user))
 
-  
-    if request.method== 'POST':
-        request.session['booked']=True
-
-        return redirect('home')
-    context={
-        'users':users,
-    }
-
-    return render(request,'app/home_page.html',context)
 
 def login_view(request):
     next=request.GET.get('next')
@@ -138,21 +157,15 @@ def logout_view(request):
     return redirect('login')
 
 
-def signin_view(request):
+def signup_view(request):
     next=request.GET.get('next')
     if request.method == 'POST':
 
         form=UserSignup(request.POST)
         img_form=ProfileImage(request.POST,request.FILES)
 
-        if img_form.is_valid():
-            print('image works')
-
-        if form.is_valid():
-            print('form works')    
 
         if form.is_valid() and img_form.is_valid():
-            print('Entered')
             email=form.cleaned_data['email']
             password=form.cleaned_data['password']
             username=form.cleaned_data['username']
@@ -224,7 +237,6 @@ def profile_edit(request,id):
 @login_required
 def profile(request):
     find_user=get_object_or_404(User,username=request.user.username)
-    print(find_user.username)
   
     if request.method == 'POST':
         posts=Products.objects.filter(user=find_user)
@@ -265,9 +277,7 @@ def profile(request):
 
 
 class AcceptedPosts(View):
-    def get(self,request):
-        pass
-
+  
     def post(self,request):
         product_id=request.POST['product_id']
         user_product=get_object_or_404(Products,pk=product_id)
@@ -283,7 +293,6 @@ class AcceptAllPosts(View):
 
     def post(self,request):
         posts=Products.objects.filter(is_pending=True)
-        users=User.objects.filter(is_admin=False)
         for post in posts:
             user=get_object_or_404(User,pk=post.user.id)
             post.is_accepted=True
@@ -293,9 +302,6 @@ class AcceptAllPosts(View):
             post.save()
 
 
-        # for user in users:
-        #     user.accepted_posts+=1
-        #     user.save()
 
         return redirect('admin-list')
 
@@ -303,7 +309,6 @@ class RejectAllPost(View):
     
     def post(self,request):
         posts=Products.objects.filter(is_pending=True)
-        users=User.objects.filter(is_admin=False)
         for post in posts:
             user=get_object_or_404(User,pk=post.user.id)
             post.is_pending=False
@@ -323,8 +328,8 @@ class Users(ListView):
     context_object_name='users'
 
     def get_context_data(self, **kwargs):
-        is_admin=self.request.user.is_superuser
         context=super().get_context_data(**kwargs)
+        is_admin=self.request.user.is_superuser
         users=User.objects.filter(is_admin=False)
         context['users']=users
         context['is_admin']=is_admin
@@ -336,6 +341,7 @@ class BlockUserView(View):
         user_id=request.POST['user_id']
         user=get_object_or_404(User,pk=user_id)
         user.is_blocked=True
+        delete_products=Products.objects.filter(user=user).delete()
         block_user=BlockUsers()
         block_user.username=user.username
         block_user.email=user.email
@@ -344,12 +350,12 @@ class BlockUserView(View):
         block_user.profile_image=profile_image
         user.save()
         block_user.save()
-        # path=self.request.path
-        # print(path)
-        # if path =='/users/':
-        #     return redirect(path)
-        # elif path == '/users/details/':
-        return redirect('users-details')    
+        path=self.request.path
+        print(path)
+        if path =='/block/user/':
+            return redirect('users')
+        elif path == '/block/users/':
+            return redirect('users-details')    
 
 
 
@@ -375,8 +381,7 @@ class UserDetail(DetailView):
 
 
 class RejectedPosts(View):
-    def get(self,request):
-        pass
+  
     
     def post(self,request):
         product_id=request.POST['product_id']
@@ -412,7 +417,6 @@ class UnblockUser(View):
         get_user.rejected_post=0
         get_user.save()
         path=self.request.path
-        print(path)
         messages.success(request,f'{get_user.username} has been remove from the block list ')
         if path =='/unblock-users/':
             return redirect('block-users')
@@ -444,11 +448,94 @@ class AdminListView(ListView):
     template_name='app/admin_list.html'
     context_object_name='users'
 
+
+
+class RequestBook(View):
+
+    def post(self,request):
+        get_user=request.user
+        product_id=request.POST['product_id']
+        user=get_object_or_404(User,pk=get_user.id)
+        get_owner=get_object_or_404(Products,pk=product_id)
+        requested_book=RequestedBook()
+        requested_book.product_owner=get_owner
+        requested_book.requestd_user=user
+        user.booked_requests+=1
+        requested_book.save()
+        user.save()
+        messages.success(request,'Request has been sent to the owner')
+
+        path=self.request.path
+        if path=='/users/user':
+            return redirect(f'{path}/{requested_book.product_owner.user.id}')         
+        elif path=='/user/item':
+            return redirect(f'{path}/{product_id}')
+      
+
+        # return redirect(f'/user/item/{product_id}')
+        
+class BookView(ListView):
+    template_name='app/requested_book.html'
+    model=RequestedBook
+    context_object_name='users'
+    def get_context_data(self, **kwargs):
+        context= super().get_context_data(**kwargs)
+        user=self.request.user
+        # print(user.id)
+        user=get_object_or_404(User,pk=user.id)
+        prodcut_owner=Products.objects.filter(user=user).first()
+        # print(prodcut_owner)    
+        owner=RequestedBook.objects.filter(product_owner__user__id=user.id)
+        context['users']=owner
+        return context
+   
+
+
+class BookedUserAccept(View):
+    def post(self,request):
+        user_id=request.POST['user_id']
+        product=get_object_or_404(RequestedBook,pk=user_id)
+        get_product=get_object_or_404(Products,pk=product.product_owner.id)
+        print(get_product.product)
+        other_products=RequestedBook.objects.filter(product_owner__product=get_product.product)
+     
+        for other_product in other_products :
+            other_product.is_rejected=True
+            other_product.is_pending=False
+            other_product.save()
+        product.is_pending=False
+        product.is_rejected=False
+        product.is_accepted=True
+        get_product.is_booked=True
+        get_product.save()  
+        product.save() 
+       
+        return redirect('requested-book')
+
+
+class BookedUserReject(View):
+
+    def post(self,request):
+        user_id=request.POST['user_id']
+        # user=get_object_or_404(User,pk=user_id)
+        product=get_object_or_404(RequestedBook,pk=user_id)
+        product.is_pending=False
+        product.is_rejected=True
+        product.save()
+        return redirect('requested-book')
+
+
+class UserBookedItem(ListView):
+    model=RequestedBook
+    template_name='app/booked_item.html'
+    context_object_name='booked_items'
     
+    def get_context_data(self, **kwargs):
+        context= super().get_context_data(**kwargs)
+        get_user=self.request.user
+        user=get_object_or_404(User,pk=get_user.id)
+        booked_items=RequestedBook.objects.filter(requestd_user=user)
+        context['booked_items']=booked_items
+        return context
     
 
-
-
-
-
-# Create your views here.

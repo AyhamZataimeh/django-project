@@ -60,7 +60,7 @@ nav > h1 {
 
 .child-1 > p {
     font-size: 20px;
-    color: red;
+    color: #0d6efd;
     text-align: center;
     animation: paragraph  .5s linear both;
     /* opacity: 0; */
@@ -189,9 +189,9 @@ form > h1::selection {
 }
 
 .password {
-    position: absolute;
+    /* position: absolute;
     top: 63%;
-    left: 10%;
+    left: 10%; */
 }
 
 footer {

@@ -26,9 +26,10 @@ class UserAccountManager(BaseUserManager):
 
 
 class UserAccount(AbstractBaseUser):
+    
     class Gender(models.TextChoices):
-        male='male',_('male')
-        female='female',_('female')
+        male='male',_('Male')
+        female='female',_('Female')
 
     class Address(models.TextChoices):
         amman='amman',_('Amman')
@@ -48,7 +49,7 @@ class UserAccount(AbstractBaseUser):
     total_posts=models.IntegerField(default=0)
     rejected_post=models.IntegerField(default=0)
     accepted_posts=models.IntegerField(default=0)
-
+    booked_requests=models.IntegerField(default=0)
     is_blocked=models.BooleanField(default=False)
     is_admin=models.BooleanField(default=False)
     is_staff=models.BooleanField(default=False)
@@ -74,7 +75,7 @@ class UserAccount(AbstractBaseUser):
         return self.is_admin
 
 class ProfileImage(models.Model):
-    image=models.ImageField(upload_to='images',blank=True,null=True)
+    image=models.ImageField(upload_to='images',default='images/default.jpg' ,blank=True,null=True)
     user=models.OneToOneField(UserAccount,on_delete=models.CASCADE,null=True)
 
     def __str__(self) -> str:
@@ -95,12 +96,13 @@ class ProfileImage(models.Model):
 
 
 class Products(models.Model):
+
     class Categories(models.TextChoices):
-        sports='sports',_('sports')
-        elctronics='elctronics',_('elctronics')
-        car_parts='car parts',_('car parts')
-        clothes='clothes',_('clothes')
-        educational='education',_('education')
+        sports='sports',_('Sports')
+        elctronics='elctronics',_('Elctronics')
+        car_parts='car parts',_('Car parts')
+        clothes='clothes',_('Clothes')
+        educational='education',_('Education')
 
     product=models.CharField(max_length=80)
     post_date=models.DateField(default=now)
@@ -135,3 +137,13 @@ class BlockUsers(models.Model):
 # Create your models here.
 
 
+
+class RequestedBook(models.Model):
+    requestd_user=models.ForeignKey(UserAccount,on_delete=models.CASCADE,null=True)
+    product_owner=models.ForeignKey(Products,on_delete=models.CASCADE,null=True)
+    is_pending=models.BooleanField(default=True)
+    is_accepted=models.BooleanField(default=False)
+    is_rejected=models.BooleanField(default=False)
+
+    def __str__(self) -> str:
+        return f'{self.product_owner.user.username} product'

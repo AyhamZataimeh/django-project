@@ -13,19 +13,20 @@
 <body>
     
     
-    <nav class="navbar bg-light sticky-top">
+    <nav class="navbar bg-primary sticky-top">
         {% if user.is_authenticated %}
-        <i id='aside-show'  class="fas fa-bars fa-2x"></i>
-        <a href="{% url 'home' %}" class="navbar-brand">
+        <i id='aside-show'  class="fas fa-bars fa-2x text-light"></i>
+        <a href="{% url 'home' %}" class="navbar-brand text-light">
             Home
         </a>
-        <h1 class="navbar-brand">
+        <h1 class="navbar-brand text-light">
             Online Donation
         </h1>
       
         <ul class="dropdown navbar-brand">
             <button style="border:none;" class="btn btn-light dropdown-toggle nav-link" id='dropdown-display'>
-                More
+                
+                    More
             </button>
           
             <div class="dropdown-menu" id="dropdown-menu">
@@ -62,6 +63,22 @@
                
           
                 {% endif %}
+                <li>
+                    <a href="{% url 'requested-book' %}" class="nav-link dropdown-item ">
+                        <i class="fas fa-user-tag"></i>
+                        requests
+    
+    
+    
+                    </a>
+            </li>
+            <li>
+                <a href="{% url 'booked_item' %}" class="nav-link dropdown-item ">
+                    <i class="fas fa-user-check"></i>
+                    Booked item
+    
+                </a>
+            </li>
                 <li>
                     <a href="{% url 'users' %}" class="nav-link dropdown-item ">
                         <i class="fas fa-users"></i>
@@ -102,6 +119,14 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{% url 'category' 'education' %}"class="nav-link dropdown-item">
+                        <i class="fas fa-graduation-cap"></i>
+                        education
+    
+                    </a> 
+                  
+                </li>
+                <li>
                     <a href="{% url 'category' 'clothes' %}" class="nav-link dropdown-item">
                         <i class="fas fa-tshirt"></i>
                         clothes
@@ -114,7 +139,7 @@
           
         </ul>
         {% else %}
-        <a href="{% url 'login' %}" class="nav-link">
+        <a href="{% url 'login' %}" class="nav-link  text-light">
             <i class="fas fa-sign-in-alt"></i>
             login
 
@@ -123,7 +148,7 @@
 
 
     </nav>
-    
+ 
 
     <aside id='aside' >
         <ul class="list-group">
@@ -170,6 +195,22 @@
                     </a>
                 </li>
             {% endif %}
+            <li>
+                <a href="{% url 'requested-book' %}" class="list-group-item list-group-item-action text-primary">
+                    <i class="fas fa-user-tag"></i>
+                    requests
+
+
+
+                </a>
+        </li>
+        <li>
+            <a href="{% url 'booked_item' %}" class="list-group-item list-group-item-action text-primary">
+                <i class="fas fa-user-check"></i>
+                Booked item
+
+            </a>
+        </li>
             <li>
                 <a href="{% url 'users' %}" class="list-group-item list-group-item-action text-primary ">
                     <i class="fas fa-users"></i>
@@ -218,51 +259,66 @@
                     clothes
             </a>
             </li>
+            <li>
+                <a href="{% url 'category' 'education' %}"class="list-group-item list-group-item-action text-primary">
+                    <i class="fas fa-graduation-cap"></i>
+                    education
+
+                </a> 
+              
+            </li>
 
 
            
         </ul>
     </aside>
     {% if user.is_authenticated %}
-    <div class="conatainer">
+    <div class="container">
         <div class="row">
             {% for product in products %}
             {% if product.is_accepted %}
             
             <div class="col-xs-12 col-sm-6 col-md-4">
-                <div class="card">
-                    <img src="{{ product.product_image.url }}" alt="" class="card-img-top">
-                    <div class="card-body">
-                        <h2 class="card-title">
+                <div class="item">
+                    <div class="card">
+                        <div class="card-header text-primary">
                             {{ product.product }}
-                        </h2>
-                        <span class="text-muted">
-                            category :{{ product.category}}
 
-                        </span>
-                        <br>
-                        <span class="text-muted">
-                            posted by: {{ product.user.username}}
-                        </span>
-                        
-                            <a 
-                            href="{% url 'item-detail' product.id %}" 
-                            class="btn btn-success card-link">
-                                More info
-                            </a>
-                          
-                        
+                        </div>
+                        <img src="{{ product.product_image.url }}" alt="" class="card-img-top" 
+                        width="200px" height="250px">
+                        <div class="card-body">
+                         
+                            <span class="text-muted">
+                                category :{{ product.category}}
+    
+                            </span>
+                            <br>
+                            <span class="text-muted">
+                                posted by: {{ product.user.username}}
+                            </span>
+                            
+                                <a 
+                                href="{% url 'item-detail' product.id %}" 
+                                class=  "btn btn-primary ">
+                                    More info
+                                </a>
+                              
+                            
+                        </div>
+                        <div class="card-footer text-muted">
+                            <span>
+                            posted in: {{ product.post_date }}
+    
+    
+                            </span>
+                            
+                        </div>
+                       
                     </div>
-                    <div class="card-footer text-muted">
-                        <span>
-                        posted in: {{ product.post_date }}
 
-
-                        </span>
-                        
-                    </div>
-                   
                 </div>
+              
             </div>
 
 
@@ -277,7 +333,8 @@
         <div class="About-us">
             <h1>About us</h1>
             <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum modi dolor, saepe sequi nostrum suscipit expedita optio tenetur corrupti quam inventore reprehenderit hic debitis, voluptate quis, nam aspernatur officia ea.
+                The donation system of our website provides the possibility of exchanging and donating things or supplies that one of the parties no longer needs. Our website allows the follow-up of the goods to be reserved by the other party by communicating with the first party, and managing it through the account of the site administrator.
+                
             </p>
 
         </div>

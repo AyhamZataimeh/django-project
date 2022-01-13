@@ -8,6 +8,9 @@ body {
     text-transform: capitalize;
 
 }
+nav {
+    width: 100%;
+}
 
 .star button {
     outline: none;
@@ -23,7 +26,7 @@ body {
 
     }
     to {
-        height: 150px;
+        height: 400px;
         display: block;
 
     }
@@ -32,7 +35,7 @@ body {
 
 @keyframes dropdown-hide {
     from {
-        height: 150px;
+        height: 400px;
         visibility: visible;
 
     }
@@ -58,9 +61,9 @@ nav i {
 .profile {
   
     background-image: url('https://images.pexels.com/photos/3184424/pexels-photo-3184424.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940&fbclid=IwAR2eCRmk5xbIm5QEDZ17txIqdnIk9PJxpkliOZz10nC5ihcvXo4f_9ITBik');
-     position: relative;
+    position: relative;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: 100% 120%;
     width: 100%;
     height:400px;
 
@@ -149,17 +152,6 @@ aside {
 
 }
 
-.card {
-    margin-top:180px;
-    margin-bottom: 10px; 
-    cursor: pointer;
-    width: 200px;
-    height: 450px;
-
-}
-.card> img {
-    height: 300px;
-}
 
 
 
@@ -170,10 +162,10 @@ aside {
 .user-post {
     color: white;
     position: absolute;
-    top: 120%;
+    top: 140%;
     left: 50%;
     z-index: 1;
-    background-color: blueviolet;
+    background-color: #0d6efd;
     transform: translate(-50%,-90%);
     padding: 30px;
     width: fit-content;
@@ -233,15 +225,25 @@ form>ul {
     color: red;
 }
 
+.post-product {
+    display: none;
+}
+
 @media screen and (max-width:600px) {
+    .post-product {
+        display: block;
+        background-color: #EEE;
+        border-radius: 10px;
+        padding: 10px;
+        margin-top:180px;
+        margin-left: 40px;
+        width: fit-content;
+    }
     .profile {
         position: relative;
+        
     }
-    .profile {
-        /* background-color: red; */
-        background-size: 100% 100%;
-    }
-
+   
     .profile-image > img {
      
         width: 200px;
@@ -249,7 +251,6 @@ form>ul {
     }
 
     .profile > .profile-image {
-         /* display: none; */
         position:absolute;
         bottom: 0%;
         left: 50%;
@@ -261,51 +262,32 @@ form>ul {
         position: absolute;
         bottom: -55%;
         text-align: center;
+        padding-left: 30px;
         /* left: 20%; */
     }
     .add {
         display:  none;
     }
 
-    .user-post {
-        position: absolute;
-        border:none;
-        color: black;
-        left: 40%;
-        margin-top: 30%;
-        visibility: visible;
-        width: 100%;
-        height: 200px;
-    }
-    .user-post > .post {
-        display: block;
-    }
 
-    .user-post > button {
-        position: absolute;
-        left: 0%;
-        top:50%;
+    .user-post {
         display: none;
+     
     }
    
-    .user-post>button[type='button'] {
-        display: none;
-    }
-    .user-post > button[type='submit'] {
-        display: none;
-    }
-
+/* 
     .container {
         margin-top: 200px;
+    } */
+    .container {
+        margin-left: -1%;
     }
 
     hr {
         display: none;
     }
-    /* .card {
-        margin-top: 200px;
-        margin-left: -20%;
-    } */
+ 
+
    
    
 
@@ -347,7 +329,6 @@ form>ul {
 .text-primary {
     text-align: center;
    
-    /* font-size: 90px; */
 }
 
 

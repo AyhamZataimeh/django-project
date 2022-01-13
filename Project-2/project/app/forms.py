@@ -7,6 +7,7 @@ User=get_user_model()
 class UserLogin(forms.Form):
     email=forms.EmailField(label='Email',max_length=80)
     password=forms.CharField(label='Password',widget=forms.PasswordInput)
+
     email.widget.attrs['class']='form-control'
     password.widget.attrs['class']='form-control'
 
@@ -58,27 +59,35 @@ class UserSignup(forms.ModelForm):
         }
         
     def clean(self,*args,**kwargs):
+
         username=self.cleaned_data['username']
         email=self.cleaned_data['email']
         password=self.cleaned_data['password']
         password2=self.cleaned_data['password2']
         phone_number=self.cleaned_data['phone_number']
-        print(username)
+        print(len(password),'1232312')
+
 
 
         if password != password2:
             raise forms.ValidationError(' Password must match ')
 
+        if len(password) <8 or len(password2)<8:
+            raise forms.ValidationError('Password must be at least 8 character')    
+
         check_email=User.objects.filter(email=email)
         check_user=User.objects.filter(username=username)
         check_phone_number=User.objects.filter(phone_number=phone_number)
 
-        if check_email.exists():
-            raise forms.ValidationError(f'{email} already exsit')
 
         if check_user.exists():
             raise forms.ValidationError(f'{username} already exsit ') 
 
+
+        if check_email.exists():
+            raise forms.ValidationError(f'{email} already exsit')
+
+      
         if check_phone_number.exists():
             raise forms.ValidationError('phone number already exsit')
 
@@ -113,7 +122,7 @@ class UserUpdate(forms.ModelForm):
         
 
 class ProfileImage(forms.ModelForm):
-    image=forms.ImageField()
+    image=forms.ImageField(required=False)
     
     class Meta:
         model=ProfileImage

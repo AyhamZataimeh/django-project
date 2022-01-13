@@ -1,6 +1,12 @@
 body {
     overflow-x: hidden
 }
+
+.container{
+    margin-left: 10%;
+    margin-bottom: 5%;
+
+}
 nav  {
     height: 60px
 
@@ -55,9 +61,6 @@ nav h1 {
 
 
 
-.card {
-    margin: 30px;
-}
 
 /* @keyframes dropdown-item {
     from {
@@ -80,7 +83,7 @@ nav h1 {
 
     }
     to {
-        height: 450px;
+        height: 550px;
         display: block;
 
     }
@@ -89,7 +92,7 @@ nav h1 {
 
 @keyframes dropdown-hide {
     from {
-        height: 350px;
+        height: 500px;
         visibility: visible;
 
     }
@@ -191,22 +194,45 @@ aside {
     width: fit-content;
     position:fixed;
     
-   
 
+   
 }
 
 
 
 
+.card-header {
+    text-align: center;
+    text-transform: capitalize  ;
+}
 
 .card {
-    height: 500px;
-    width: 200px;
+  
+    border-radius: 20px;
+    text-transform: capitalize;
+
+
 }
 
-.card > img {
-    height: 300px;
+.item {
+    cursor: pointer;
+    margin-top: 10%;
+    /* margin:20%; */
+    border:1px solid #0d6efd;
+    height: fit-content;
+    width: 200px;
+    box-shadow: 0px 0px 5px 1px #0d6efd;
+    border-radius: 20px;
 }
+
+.card-header {
+    text-align: center;
+}
+
+.card-body{
+    text-align: center;
+}
+
 
 
 

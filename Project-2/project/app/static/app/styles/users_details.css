@@ -18,3 +18,32 @@ body {
 .gold-star {
     color: gold;
 }
+
+
+@keyframes dropdown-show {
+    from {
+        height: 0px;
+        display: none;
+
+    }
+    to {
+        height: 250px;
+        display: block;
+
+    }
+    
+}
+
+@keyframes dropdown-hide {
+    from {
+        height: 250px;
+        visibility: visible;
+
+    }
+    to {
+        height: 0px;
+        visibility: hidden;
+
+    }
+    
+}

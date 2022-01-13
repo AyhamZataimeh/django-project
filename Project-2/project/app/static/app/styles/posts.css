@@ -12,6 +12,127 @@
 
 
 
+nav > #aside-show {
+    display: none;
+}
+
+.card-header {
+    text-align: center;
+    text-transform: capitalize  ;
+}
+
+.card {
+  
+    border-radius: 20px;
+    text-transform: capitalize;
+
+
+}
+
+.item {
+    cursor: pointer;
+    margin-top: 10%;
+    border:1px solid #0d6efd;
+    height: fit-content;
+    width: 200px;
+    box-shadow: 0px 0px 5px 1px #0d6efd;
+    border-radius: 20px;
+}
+
+.card-header {
+    text-align: center;
+}
+
+.card-body{
+    text-align: center;
+}
+
+
+
+
+.container{
+    margin-left: 10%;
+    margin-bottom: 5%;
+
+}
+nav  {
+    height: 60px
+
+
+
+}
+
+
+
+nav a {
+    padding: 20px;
+        
+
+}
+
+nav h1 {
+    color: #0d6efd;
+}
+
+
+
+.dropdown {
+    position: relative;
+
+}
+
+.dropdown-menu {
+    position: absolute;
+    left: 0%;
+    top: 100%;
+    overflow: hidden;
+    display: block;
+    visibility: hidden;
+    /* animation: dropdown-show .5s linear both; */
+
+}
+
+.dropdown-menu li a {
+    /* animation-delay: .2s; */
+    animation-name: dropdown-item ;
+    animation-direction: alternate;
+    animation-duration: 1s;
+    animation-iteration-count: 2;
+    animation-delay: .5s;
+
+  
+    
+ 
+}
+
+
+
+
+.dropdown-toggle {
+    cursor: pointer;
+}
+
+
+
+@keyframes dropdown-hide {
+    from {
+        height: 220px;
+        visibility: visible;
+
+    }
+    to {
+        height: 0px;
+        visibility: hidden;
+
+    }
+    
+}
+
+
+
+
+
+
 @keyframes dropdown-show {
     from {
         height: 0px;
@@ -19,7 +140,7 @@
 
     }
     to {
-        height: 170px;
+        height: 220px;
         display: block;
 
     }
@@ -41,3 +162,98 @@
 }
 
 
+
+@keyframes aside-show {
+    from {
+        visibility: hidden;
+        transform: translateX(-100%);
+
+    }
+
+    to {
+        visibility: visible;
+        transform: translateX(0%);
+
+    }
+    
+}
+
+@keyframes aside-hide {
+    from {
+        visibility: visible;
+        transform: translateX(0%);
+        
+
+    }
+
+    to {
+        visibility: hidden;
+        transform: translateX(-100%);
+        
+    }
+    
+}
+
+
+
+aside {
+    visibility: hidden;
+    width: fit-content;
+    position:fixed;
+    
+
+   
+}
+
+@media screen and (max-width:600px) {
+   
+    .row {
+        
+        display: inline-block;
+        margin-left:50px;
+    }
+
+    nav>a {
+        display: none;
+    }
+
+    nav > h1 {
+        display: none;
+    }
+
+    nav > ul {
+        display: none;
+
+    }
+    nav > #aside-show {
+        display: block;
+        padding: 5px;
+        cursor: pointer;
+    }
+
+  
+    aside {
+        z-index: 1;
+        position: fixed;
+        
+    }
+    .card {
+
+        z-index: -1;
+    }
+
+    
+
+
+    
+}
+
+
+
+
+@media screen and (min-width:600px) {
+    aside {
+        display: none;
+    }
+    
+}

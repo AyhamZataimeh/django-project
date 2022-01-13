@@ -1,0 +1,202 @@
+body {
+    overflow-x: hidden;
+}
+
+
+nav  {
+    height: 60px
+
+
+
+}
+
+nav > #aside-show {
+    display: none;
+}
+
+nav a {
+    padding: 20px;
+        
+
+}
+
+nav h1 {
+    color: #0d6efd;
+}
+
+
+
+.dropdown {
+    position: relative;
+
+}
+
+.dropdown-menu {
+    position: absolute;
+    left: 0%;
+    top: 100%;
+    overflow: hidden;
+    display: block;
+    visibility: hidden;
+    /* animation: dropdown-show .5s linear both; */
+
+}
+
+.dropdown-menu li a {
+    /* animation-delay: .2s; */
+    animation-name: dropdown-item ;
+    animation-direction: alternate;
+    animation-duration: 1s;
+    animation-iteration-count: 2;
+    animation-delay: .5s;
+
+  
+    
+ 
+}
+
+
+
+
+/* @keyframes dropdown-item {
+    from {
+        transform: translateY(0px);
+    }
+    to {
+        transform: translateY(20px);
+    }
+    
+} */
+
+.dropdown-toggle {
+    cursor: pointer;
+}
+
+@keyframes dropdown-show {
+    from {
+        height: 0px;
+        display: none;
+
+    }
+    to {
+        height: 250px;
+        display: block;
+
+    }
+    
+}
+
+@keyframes dropdown-hide {
+    from {
+        height: 250px;
+        visibility: visible;
+
+    }
+    to {
+        height: 0px;
+        visibility: hidden;
+
+    }
+    
+}
+
+
+
+
+
+@keyframes aside-show {
+    from {
+        visibility: hidden;
+        transform: translateX(-100%);
+
+    }
+
+    to {
+        visibility: visible;
+        transform: translateX(0%);
+
+    }
+    
+}
+
+@keyframes aside-hide {
+    from {
+        visibility: visible;
+        transform: translateX(0%);
+        
+
+    }
+
+    to {
+        visibility: hidden;
+        transform: translateX(-100%);
+        
+    }
+    
+}
+
+
+
+aside {
+    visibility: hidden;
+    width: fit-content;
+    position:fixed;
+    
+
+   
+}
+
+
+
+@media screen and (max-width:600px) {
+  
+
+    nav {
+        width: 160%;
+    }
+    nav>a {
+        display: none;
+    }
+
+    nav > h1 {
+        display: none;
+    }
+
+    nav > ul {
+        display: none;
+
+    }
+    nav > #aside-show {
+        display: block;
+        padding: 5px;
+        cursor: pointer;
+    }
+
+    aside {
+        z-index: 1;
+        position: fixed;
+        
+    }
+
+    .card {
+        z-index: -1;
+    }
+
+    
+
+
+    
+}
+
+
+
+
+@media screen and (min-width:600px) {
+    aside {
+        display: none;
+    }
+    
+}
+
+
+

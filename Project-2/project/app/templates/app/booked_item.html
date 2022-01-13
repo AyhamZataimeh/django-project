@@ -1,0 +1,242 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'app/styles/booked_item.css' %}">
+    <title>Document</title>
+</head>
+<body>
+
+    
+    <nav class="navbar bg-primary sticky-top ">
+        {% if user.is_authenticated %}
+        <i id='aside-show'  class="fas fa-bars fa-2x text-light"></i>
+        <a href="{% url 'home' %}" class="navbar-brand nav-link text-light">
+            Home
+        </a>
+        <h1 class="navbar-brand text-light">
+            Online Donation
+        </h1>
+      
+        <ul class="dropdown navbar-brand">
+            <button style="border:none;" class="btn btn-light dropdown-toggle nav-link" id='dropdown-display'>
+                More
+            </button>
+          
+            <div class="dropdown-menu" id="dropdown-menu">
+                <li>
+                    <a class="nav-link dropdown-item" href="{% url 'profile' %}">
+                    <i class="fas fa-user"></i>
+
+                        Profile
+                    </a>
+                    
+                </li>
+              
+                {% if user.is_admin %}
+                <li>
+                    <a class="nav-link dropdown-item" href="{% url 'admin-list' %}">
+                    <i class="fas fa-users"></i>
+
+                        Posts
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link dropdown-item" href="{% url 'block-users' %}">
+                        <i class="fas fa-user-lock"></i>
+                        Block list
+                    </a>
+                </li>
+                <a href="{% url 'users-details' %}" class="dropdown-item nav-link">
+                    <i class="fas fa-users-cog"></i>
+                    Users Details
+                </a>
+            </li>
+                {% endif %}
+                {% if not is_visitor %}
+                <li>
+                    <a href="{% url 'requested-book' %}" class="nav-link dropdown-item">
+                        <i class="fas fa-user-tag"></i>
+                        requests
+
+
+
+                    </a>
+            </li>
+         
+                {% endif %}
+             
+                <li>
+                    <a href="{% url 'users' %}" class="nav-link dropdown-item ">
+                        <i class="fas fa-users"></i>
+                        Users
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'user-edit' user.id %}" class="nav-link dropdown-item" >
+                        <i class="fas fa-user-edit"></i>
+                        Edit profile
+                    </a>
+                </li>
+               
+                <li>
+                    <a class="nav-link dropdown-item" href="{% url 'logout' %}">
+                    <i class="fas fa-sign-out-alt"></i>
+
+                        Logout
+                    </a>
+                </li>
+              
+            
+
+            </div>
+
+          
+        </ul>
+        {% else %}
+        <a href="{% url 'login' %}" class="nav-link">
+            <i class="fas fa-sign-in-alt"></i>
+            login
+
+        </a>
+        {% endif %}
+
+
+    </nav>
+
+    <aside id='aside' >
+        <ul class="list-group">
+           
+            <li>
+                <a href="{% url 'home' %}" class="list-group-item list-group-item-action text-primary">
+            <i class="fas fa-home " ></i>
+            Home
+
+
+            
+                </a>
+
+               
+            </li>
+            <li>
+                <a class="list-group-item list-group-item-action text-primary" href="{% url 'profile' %}">
+                <i class="fas fa-user"></i>
+
+                    Profile
+                </a>
+                
+            </li>
+          
+            {% if user.is_admin %}
+            <li>
+                <a class="list-group-item list-group-item-action text-primary" href="{% url 'admin-list' %}">
+                <i class="fas fa-users"></i>
+
+                    Posts
+                </a>
+            </li>
+            <li>
+                <a class="list-group-item list-group-item-action text-primary" href="{% url 'block-users' %}">
+                    <i class="fas fa-user-lock"></i>
+                    Block list
+                </a>
+            </li>
+            <a href="{% url 'users-details' %}" class="dropdown-item nav-link">
+                <i class="fas fa-users-cog"></i>
+                Users Details
+            </a>
+        </li>
+            {% endif %}
+            
+
+            {% if not is_visitor %}
+                <li>
+                    <a href="{% url 'requested-book' %}" class="list-group-item list-group-item-action text-primary">
+                        <i class="fas fa-user-tag"></i>
+                        requests
+
+
+
+                    </a>
+            </li>
+           
+                {% endif %}
+             
+            <li>
+                <a href="{% url 'user-edit' user.id %}" class="list-group-item list-group-item-action text-primary">
+                    <i class="fas fa-user-edit"></i>
+
+                    Edit profile
+
+                </a>
+            </li>
+            <li>
+                <a  class="list-group-item list-group-item-action text-primary" 
+                href="{% url 'logout' %}">
+                <i class="fas fa-sign-out-alt"></i>
+
+                    Logout
+                </a>
+            </li>
+            
+
+           
+        </ul>
+    </aside>
+
+
+    
+
+    <div class="container">
+        <div class="row">
+            {% for booked_item in booked_items %}
+                {% if booked_item.is_accepted and booked_item.product_owner.is_booked %}
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <div class="item">
+                        <div class="card">
+                            <div class="card-header text-primary">
+                                {{ booked_item.product_owner.product }}
+                            </div>
+                            <img src="{{ booked_item.product_owner.product_image.url }}"
+                             alt="" class="card-img-top" width="200px" height="250px">
+                            <div class="card-body text-primary">
+                                <i class="fas fa-user">
+                                    {{booked_item.product_owner.user.username }} product
+                                </i>
+                                <br>
+                                category: {{ booked_item.product_owner.category }}
+                            </div>
+    
+                            <div class="card-footer">
+                                <form action="/unbook/item" method="POST">
+                                    {% csrf_token %}
+                                    <button class="btn btn-primary" name='product_id'
+                                     value="{{ booked_item.product_owner.id }}">
+                                        Unbooked
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                  
+
+                </div>
+                
+                {% endif %}
+            {% endfor %}
+        </div>
+          
+    </div>
+
+    <script src="{% static 'app/script/home_page.js' %}"></script>
+
+   
+    
+</body>
+</html>
